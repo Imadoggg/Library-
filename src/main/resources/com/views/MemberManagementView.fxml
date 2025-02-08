@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.MemberManagementController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <padding>
+            <Insets bottom="10"/>
+        </padding>
+
+        <TextField fx:id="searchField"
+                   promptText="ค้นหาสมาชิก"
+                   prefWidth="200"/>
+
+        <Button text="ค้นหา"
+                onAction="#handleSearchMember"/>
+
+        <Button text="เพิ่มสมาชิก"
+                onAction="#handleAddMember"/>
+    </HBox>
+
+    <TableView fx:id="memberTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="Member ID" prefWidth="100"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
+            <TableColumn fx:id="contactColumn" text="Tel." prefWidth="150"/>
+        </columns>
+    </TableView>
+
+</VBox>

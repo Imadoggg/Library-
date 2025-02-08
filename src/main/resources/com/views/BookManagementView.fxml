@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.BookManagementController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <padding>
+            <Insets bottom="10"/>
+        </padding>
+
+        <ComboBox fx:id="categoryComboBox"
+                  promptText="เลือกหมวดหมู่"
+                  prefWidth="150"/>
+
+        <TextField fx:id="searchField"
+                   promptText="ค้นหาหนังสือ"
+                   prefWidth="200"/>
+
+        <Button text="ค้นหา"
+                onAction="#handleSearchBook"/>
+
+        <Button text="เพิ่มหนังสือ"
+                onAction="#handleAddBook"/>
+    </HBox>
+
+    <TableView fx:id="bookTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="100"/>
+            <TableColumn fx:id="titleColumn" text="Title" prefWidth="200"/>
+            <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+            <TableColumn fx:id="categoryColumn" text="Category" prefWidth="100"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+</VBox>
