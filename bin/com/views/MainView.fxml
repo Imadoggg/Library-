@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.MainController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <MenuBar>
+        <Menu text="ห้องสมุดโย้ๆ">
+            <MenuItem text="ออกจากโปรแกรม" onAction="#handleExit"/>
+        </Menu>
+    </MenuBar>
+
+    <TabPane fx:id="mainTabPane" VBox.vgrow="ALWAYS">
+        <Tab text="จัดการหนังสือ" closable="false">
+            <content>
+                <fx:include source="BookManagementView.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="จัดการสมาชิก" closable="false">
+            <content>
+                <fx:include source="MemberManagementView.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="ยืม-คืนหนังสือ" closable="false">
+            <content>
+                <fx:include source="BorrowReturnView.fxml"/>
+            </content>
+        </Tab>
+    </TabPane>
+
+</VBox>

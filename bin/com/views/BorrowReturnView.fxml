@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.BorrowReturnController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <!-- ส่วนยืมหนังสือ -->
+    <TitledPane text="ยืมหนังสือ" expanded="true">
+        <VBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="memberComboBox"
+                          promptText="เลือกสมาชิก"
+                          prefWidth="200"/>
+
+                <ComboBox fx:id="bookComboBox"
+                          promptText="เลือกหนังสือ"
+                          prefWidth="200"/>
+
+                <Button text="ยืมหนังสือ"
+                        onAction="#handleBorrowBook"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+
+    <!-- ส่วนคืนหนังสือ -->
+    <TitledPane text="คืนหนังสือ" expanded="true">
+        <VBox spacing="10">
+            <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="borrowIdColumn" text="Borrow ID" prefWidth="100"/>
+                    <TableColumn fx:id="memberNameColumn" text="Member" prefWidth="150"/>
+                    <TableColumn fx:id="bookTitleColumn" text="Book Title" prefWidth="200"/>
+                    <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150"/>
+                    <TableColumn fx:id="actionColumn" text="Process" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </TitledPane>
+
+</VBox>
