@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.UserBookSearchController"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <!-- หัวข้อ -->
+    <Label text="ค้นหาหนังสือ" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <!-- ตัวกรองค้นหา -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 5;">
+        <TextField fx:id="searchField" promptText="ค้นหาตามชื่อ, ผู้แต่ง, หมวดหมู่..." prefWidth="300"/>
+
+        <Label text="หมวดหมู่:"/>
+        <ComboBox fx:id="categoryComboBox" promptText="ทั้งหมด"/>
+
+        <CheckBox fx:id="availableOnlyCheckBox" text="แสดงเฉพาะหนังสือที่พร้อมให้ยืม"/>
+
+        <Button text="ค้นหา" onAction="#handleSearch"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- ตัวเลือกการแสดงผล -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <ToggleButton fx:id="gridViewButton" text="แสดงแบบการ์ด" selected="true"/>
+        <ToggleButton fx:id="tableViewButton" text="แสดงแบบตาราง"/>
+    </HBox>
+
+    <!-- พื้นที่แสดงผลหนังสือ (StackPane เพื่อสลับระหว่างมุมมองตารางและกริด) -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- มุมมองกริด -->
+        <ScrollPane fx:id="gridViewPane" fitToWidth="true" style="-fx-background-color: transparent;">
+            <FlowPane fx:id="bookCardsPane" hgap="15" vgap="15" style="-fx-padding: 10;"/>
+        </ScrollPane>
+
+        <!-- มุมมองตาราง -->
+        <TableView fx:id="bookTableView" visible="false">
+            <columns>
+                <TableColumn fx:id="idColumn" text="รหัส" prefWidth="80"/>
+                <TableColumn fx:id="titleColumn" text="ชื่อหนังสือ" prefWidth="250"/>
+                <TableColumn fx:id="authorColumn" text="ผู้แต่ง" prefWidth="150"/>
+                <TableColumn fx:id="categoryColumn" text="หมวดหมู่" prefWidth="100"/>
+                <TableColumn fx:id="statusColumn" text="สถานะ" prefWidth="100"/>
+                <TableColumn fx:id="actionColumn" text="ดำเนินการ" prefWidth="120"/>
+            </columns>
+        </TableView>
+    </StackPane>
+
+    <!-- สถานะการค้นหา -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 5;">
+        <Label fx:id="resultCountLabel" text="พบ 0 รายการ"/>
+    </HBox>
+</VBox>

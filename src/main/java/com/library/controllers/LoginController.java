@@ -1,27 +1,48 @@
 package com.library.controllers;
 
-import com.library.LibraryApplication;
 import com.library.LibraryDataManager;
-import com.library.models.UserRole;
+import com.library.utils.AppStyles;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class LoginController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label errorLabel;
+    @FXML private Button loginButton;
+    @FXML private VBox loginFormContainer;
+    @FXML private Label titleLabel;
+    @FXML private Label subtitleLabel;
 
     private LibraryDataManager dataManager;
 
     @FXML
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
+
+        // ตั้งค่าสไตล์
+        loginFormContainer.setStyle(AppStyles.CARD_STYLE);
+        titleLabel.setStyle(AppStyles.HEADER_TEXT);
+        subtitleLabel.setStyle(AppStyles.SMALL_TEXT);
+        loginButton.setStyle(AppStyles.PRIMARY_BUTTON);
+        errorLabel.setStyle("-fx-text-fill: " + AppStyles.DANGER_COLOR + ";");
+
+        // เพิ่มสไตล์เมื่อ hover โดยใช้ Event Handlers
+        loginButton.setOnMouseEntered(e ->
+                loginButton.setStyle(AppStyles.PRIMARY_BUTTON + "-fx-opacity: 0.9;")
+        );
+
+        loginButton.setOnMouseExited(e ->
+                loginButton.setStyle(AppStyles.PRIMARY_BUTTON)
+        );
     }
 
     @FXML

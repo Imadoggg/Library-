@@ -10,7 +10,7 @@ public class LibraryApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/MainView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/LoginView.fxml"));
             Parent root = loader.load();
 
             primaryStage.setTitle("ระบบจัดการห้องสมุด");

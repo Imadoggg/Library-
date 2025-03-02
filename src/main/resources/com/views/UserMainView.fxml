@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.library.controllers.UserMainController"
+            prefHeight="600.0" prefWidth="800.0">
+
+    <!-- แถบด้านบน -->
+    <top>
+        <HBox style="-fx-background-color: #2196F3; -fx-padding: 10;"
+              alignment="CENTER_LEFT" spacing="10">
+            <Label text="ระบบห้องสมุด - ผู้ใช้งาน"
+                   style="-fx-text-fill: white; -fx-font-size: 18;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="usernameLabel" style="-fx-text-fill: white;"/>
+            <Button text="ออกจากระบบ" onAction="#handleLogout"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+        </HBox>
+    </top>
+
+    <!-- แถบนำทางด้านซ้าย -->
+    <left>
+        <VBox style="-fx-background-color: white; -fx-padding: 10;" spacing="5" prefWidth="200">
+            <Button text="หน้าหลัก" maxWidth="Infinity" onAction="#showHomepage"
+                    style="-fx-background-color: #64B5F6; -fx-text-fill: white;"/>
+            <Button text="ค้นหาหนังสือ" maxWidth="Infinity" onAction="#showBookSearch"/>
+            <Button text="หนังสือที่ยืม" maxWidth="Infinity" onAction="#showMyBorrows"/>
+            <Button text="ประวัติการยืม" maxWidth="Infinity" onAction="#showBorrowHistory"/>
+            <Button text="โปรไฟล์" maxWidth="Infinity" onAction="#showProfile"/>
+        </VBox>
+    </left>
+
+    <!-- ส่วนกลาง -->
+    <center>
+        <StackPane fx:id="contentArea">
+            <!-- เริ่มต้นแสดงหน้าหลัก ซึ่งจะถูกโหลดใน UserMainController.initialize() -->
+        </StackPane>
+    </center>
+</BorderPane>
