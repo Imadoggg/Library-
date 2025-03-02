@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.LoginCon   troller"
+      spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <VBox alignment="CENTER" spacing="10">
+        <Text text="ระบบจัดการห้องสมุด" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Text text="กรุณาเข้าสู่ระบบ" style="-fx-font-size: 14; -fx-fill: #757575;"/>
+    </VBox>
+
+    <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
+          maxWidth="350" spacing="15">
+
+        <Label text="ชื่อผู้ใช้" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="usernameField" promptText="ชื่อผู้ใช้"/>
+
+        <Label text="รหัสผ่าน" style="-fx-font-weight: bold;"/>
+        <PasswordField fx:id="passwordField" promptText="รหัสผ่าน"/>
+
+        <Label fx:id="errorLabel" textFill="RED" visible="false"/>
+
+        <Button text="เข้าสู่ระบบ"
+                onAction="#handleLogin"
+                style="-fx-background-color: #3F51B5; -fx-text-fill: white;"
+                maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- ข้อมูลผู้ใช้ตัวอย่าง -->
+    <VBox style="-fx-padding: 10;" spacing="5">
+        <Text text="ข้อมูลผู้ใช้ตัวอย่าง:" style="-fx-font-weight: bold;"/>
+        <Text text="Admin: username = admin, password = admin"/>
+        <Text text="User: username = user, password = user"/>
+    </VBox>
+
+</VBox>

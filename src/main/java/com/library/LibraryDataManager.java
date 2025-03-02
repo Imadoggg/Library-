@@ -1,8 +1,6 @@
 package com.library;
 
-import com.library.models.Book;
-import com.library.models.Member;
-import com.library.models.BorrowRecord;
+import com.library.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.List;
@@ -15,14 +13,20 @@ public class LibraryDataManager {
     private ObservableList<BorrowRecord> borrowRecords;
     private List<Runnable> memberUpdateListeners = new ArrayList<>();
     private List<Runnable> bookUpdateListeners = new ArrayList<>();
+    private ObservableList<User> users;
+    private User currentUser;
 
     private static LibraryDataManager instance;
+
+
 
     private LibraryDataManager() {
         books = FXCollections.observableArrayList();
         members = FXCollections.observableArrayList();
         borrowRecords = FXCollections.observableArrayList();
         addSampleData();
+        users = FXCollections.observableArrayList();
+
     }
 
     private void addSampleData() {
@@ -41,6 +45,11 @@ public class LibraryDataManager {
                 new Member("M002", "Jane Smith", "098-765-4321"),
                 new Member("M003", "Bob Wilson", "111-222-3333")
         );
+        users.addAll(
+                new User("admin", "admin", UserRole.ADMIN, "ผู้ดูแลระบบ"),
+                new User("user", "user", UserRole.USER, "ผู้ใช้ทั่วไป")
+        );
+
     }
 
     public static LibraryDataManager getInstance() {
@@ -147,5 +156,37 @@ public class LibraryDataManager {
         return books.stream()
                 .filter(book -> book.getCategory().equals(category))
                 .collect(Collectors.toList());
+    }
+    public boolean login(String username, String password) {
+        User user = users.stream()
+                .filter(u -> u.getUsername().equals(username) && u.getPassword().equals(password))
+                .findFirst()
+                .orElse(null);
+
+        if (user != null) {
+            currentUser = user;
+            return true;
+        }
+        return false;
+    }
+
+    public void logout() {
+        currentUser = null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public boolean isCurrentUserAdmin() {
+        return currentUser != null && currentUser.getRole() == UserRole.ADMIN;
+    }
+
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
     }
 }
