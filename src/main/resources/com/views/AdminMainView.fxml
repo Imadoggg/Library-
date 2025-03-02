@@ -3,40 +3,107 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx/23.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.library.controllers.AdminMainController"
-            prefHeight="600.0" prefWidth="800.0">
+            prefHeight="600.0" prefWidth="900.0">
 
     <!-- แถบด้านบน -->
     <top>
-        <HBox style="-fx-background-color: #3F51B5; -fx-padding: 10;"
-              alignment="CENTER_LEFT" spacing="10">
-            <Label text="ระบบจัดการห้องสมุด - Admin"
-                   style="-fx-text-fill: white; -fx-font-size: 18;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="usernameLabel" style="-fx-text-fill: white;"/>
-            <Button text="ออกจากระบบ" onAction="#handleLogout"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
-        </HBox>
+        <VBox>
+            <HBox style="-fx-background-color: #3F51B5; -fx-padding: 15;"
+                  alignment="CENTER_LEFT" spacing="10">
+                <Label text="ระบบจัดการห้องสมุด"
+                       style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- ปุ่มแจ้งเตือน -->
+                <Button style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <graphic>
+                        <Text text="🔔" style="-fx-fill: white; -fx-font-size: 18;"/>
+                    </graphic>
+                </Button>
+
+                <Label text="|" style="-fx-text-fill: white;"/>
+
+                <!-- ชื่อผู้ใช้ -->
+                <Label text="ผู้ดูแลระบบ" style="-fx-text-fill: white;"/>
+                <Label fx:id="usernameLabel" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+
+                <Button text="ออกจากระบบ" onAction="#handleLogout"
+                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 3;"/>
+            </HBox>
+
+            <!-- แถบเมนูเรียกด่วน -->
+            <HBox style="-fx-background-color: #303F9F; -fx-padding: 5 15;" spacing="20">
+                <Button text="หน้าแรก" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="+ เพิ่มหนังสือ" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="+ เพิ่มสมาชิก" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="ยืมหนังสือ" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="รายงาน" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
     </top>
 
     <!-- แถบนำทางด้านซ้าย -->
     <left>
-        <VBox style="-fx-background-color: white; -fx-padding: 10;" spacing="5" prefWidth="200">
-            <Button text="แดชบอร์ด" maxWidth="Infinity" onAction="#showDashboard"
-                    style="-fx-background-color: #5C6BC0; -fx-text-fill: white;"/>
-            <Button text="จัดการหนังสือ" maxWidth="Infinity" onAction="#showBookManagement"/>
-            <Button text="จัดการสมาชิก" maxWidth="Infinity" onAction="#showMemberManagement"/>
-            <Button text="ยืม-คืนหนังสือ" maxWidth="Infinity" onAction="#showBorrowReturn"/>
+        <VBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
+              prefWidth="230" spacing="5">
+
+            <!-- ส่วนข้อมูลผู้ใช้ -->
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+                <Label text="👤" style="-fx-font-size: 48;"/>
+                <Label text="ผู้ดูแลระบบ" style="-fx-font-weight: bold;"/>
+                <Label text="admin@library.com" style="-fx-font-size: 12; -fx-text-fill: #757575;"/>
+            </VBox>
+
+            <!-- เมนูหลัก -->
+            <VBox spacing="2" style="-fx-padding: 10;">
+                <Label text="เมนูหลัก" style="-fx-font-size: 12; -fx-text-fill: #757575; -fx-padding: 5 10;"/>
+
+                <Button text="📊 แดชบอร์ด" maxWidth="Infinity" onAction="#showDashboard"
+                        style="-fx-background-color: #E8EAF6; -fx-text-fill: #3F51B5; -fx-alignment: BASELINE_LEFT; -fx-padding: 10; -fx-font-weight: bold;"/>
+
+                <Button text="📚 จัดการหนังสือ" maxWidth="Infinity" onAction="#showBookManagement"
+                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
+
+                <Button text="👥 จัดการสมาชิก" maxWidth="Infinity" onAction="#showMemberManagement"
+                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
+
+                <Button text="🔄 ยืม-คืนหนังสือ" maxWidth="Infinity" onAction="#showBorrowReturn"
+                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- เมนูเสริม -->
+            <VBox spacing="2" style="-fx-padding: 10;">
+                <Label text="รายงาน" style="-fx-font-size: 12; -fx-text-fill: #757575; -fx-padding: 5 10;"/>
+
+                <Button text="📝 รายงานการยืม" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
+
+                <Button text="📈 สถิติการใช้งาน" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- ส่วนล่าง -->
+            <HBox alignment="CENTER" style="-fx-padding: 10;">
+                <Button text="⚙️ ตั้งค่า" style="-fx-background-color: transparent;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="❓ ช่วยเหลือ" style="-fx-background-color: transparent;"/>
+            </HBox>
         </VBox>
     </left>
 
     <!-- ส่วนกลาง -->
     <center>
         <StackPane fx:id="contentArea">
-            <!-- เริ่มต้นแสดง dashboard ซึ่งจะถูกโหลดใน AdminMainController.initialize() -->
+            <!-- เริ่มต้นแสดง dashboard ในเมธอด initialize() -->
         </StackPane>
     </center>
 </BorderPane>

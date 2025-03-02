@@ -33,6 +33,15 @@ public class UserBorrowHistoryController {
         dataManager = LibraryDataManager.getInstance();
         borrowHistory = FXCollections.observableArrayList();
 
+        // เพิ่มตัวเลือกใน ComboBox ในโค้ดแทนที่จะระบุใน FXML
+        periodComboBox.getItems().addAll(
+                "ทั้งหมด",
+                "เดือนนี้",
+                "3 เดือนที่ผ่านมา",
+                "6 เดือนที่ผ่านมา",
+                "ปีนี้"
+        );
+
         // เลือก "ทั้งหมด" เป็นค่าเริ่มต้น
         periodComboBox.getSelectionModel().selectFirst();
 

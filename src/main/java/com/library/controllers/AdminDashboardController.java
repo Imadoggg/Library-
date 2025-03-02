@@ -61,6 +61,22 @@ public class AdminDashboardController {
                 pieChartData.add(new PieChart.Data(category + " (" + count + ")", count)));
 
         bookCategoryChart.setData(pieChartData);
+
+        // เพิ่มสีสันให้กับกราฟ
+        int i = 0;
+        for (PieChart.Data data : pieChartData) {
+            String color = switch (i % 5) {
+                case 0 -> "#2196F3"; // น้ำเงิน
+                case 1 -> "#4CAF50"; // เขียว
+                case 2 -> "#FFC107"; // เหลือง
+                case 3 -> "#9C27B0"; // ม่วง
+                case 4 -> "#FF5722"; // ส้ม
+                default -> "#2196F3";
+            };
+
+            data.getNode().setStyle("-fx-pie-color: " + color + ";");
+            i++;
+        }
     }
 
     private void updatePopularBooks() {

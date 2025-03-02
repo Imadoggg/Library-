@@ -168,30 +168,44 @@ public class UserBookSearchController {
     private VBox createBookCard(Book book) {
         VBox card = new VBox(10);
         card.setPrefWidth(180);
-        card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;");
+        card.setMinWidth(180);
+        card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);");
 
-        // พื้นที่สำหรับรูปปก (จำลองด้วยกล่องสี)
+        // พื้นที่สำหรับรูปปก (ใส่สีเทา)
         VBox cover = new VBox();
-        cover.setPrefHeight(200);
-        String coverColor = book.isAvailable() ? "#E3F2FD" : "#FFEBEE";
+        cover.setPrefHeight(220);
+        cover.setMinHeight(220);
+        String coverColor = "#d9d9d9"; // สีเทาสำหรับทุกหนังสือ
         cover.setStyle("-fx-background-color: " + coverColor + "; -fx-background-radius: 5;");
 
+        // เพิ่มตัวอักษรแรกของชื่อหนังสือ
+        Label initialLabel = new Label(book.getTitle().substring(0, 1).toUpperCase());
+        initialLabel.setStyle("-fx-font-size: 48; -fx-text-fill: white; -fx-font-weight: bold;");
+        initialLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        initialLabel.setPrefWidth(Double.MAX_VALUE);
+        initialLabel.setPrefHeight(Double.MAX_VALUE);
+        cover.getChildren().add(initialLabel);
+        cover.setAlignment(javafx.geometry.Pos.CENTER);
+
         Label status = new Label(book.isAvailable() ? "พร้อมให้ยืม" : "ถูกยืมแล้ว");
-        status.setStyle("-fx-padding: 5; -fx-background-radius: 3; -fx-font-size: 11; " +
+        status.setStyle("-fx-padding: 5 10; -fx-background-radius: 3; -fx-font-size: 11; " +
                 "-fx-background-color: " + (book.isAvailable() ? "#4CAF50" : "#F44336") + ";" +
                 "-fx-text-fill: white;");
 
-        Text title = new Text(book.getTitle());
-        title.setStyle("-fx-font-weight: bold; -fx-font-size: 14; -fx-wrapping-width: 160;");
+        Label title = new Label(book.getTitle());
+        title.setWrapText(true);
+        title.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+        title.setMinHeight(40);
 
-        Text author = new Text(book.getAuthor());
-        author.setStyle("-fx-font-size: 12; -fx-fill: #757575;");
+        Label author = new Label(book.getAuthor());
+        author.setWrapText(true);
+        author.setStyle("-fx-font-size: 12; -fx-text-fill: #757575;");
 
-        Text category = new Text(book.getCategory());
-        category.setStyle("-fx-font-size: 12; -fx-fill: #757575;");
+        Label category = new Label(book.getCategory());
+        category.setStyle("-fx-font-size: 12; -fx-text-fill: #757575; -fx-background-color: #F5F5F5; -fx-padding: 2 8; -fx-background-radius: 10;");
 
         Button detailButton = new Button("รายละเอียด");
-        detailButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+        detailButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 5;");
         detailButton.setPrefWidth(Double.MAX_VALUE);
         detailButton.setOnAction(event -> showBookDetail(book));
 

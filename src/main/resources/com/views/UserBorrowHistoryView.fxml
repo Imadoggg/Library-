@@ -3,47 +3,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.collections.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx/23.0.2"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.library.controllers.UserBorrowHistoryController"
       spacing="15"
       style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
 
     <!-- หัวข้อ -->
-    <Label text="ประวัติการยืมหนังสือ" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+    <Label text="Book borrowing history" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
     <!-- ตัวเลือกการค้นหา -->
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 5;">
-        <Label text="ช่วงเวลา:"/>
-        <ComboBox fx:id="periodComboBox" promptText="ทั้งหมด">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="ทั้งหมด"/>
-                    <String fx:value="เดือนนี้"/>
-                    <String fx:value="3 เดือนที่ผ่านมา"/>
-                    <String fx:value="6 เดือนที่ผ่านมา"/>
-                    <String fx:value="ปีนี้"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <Label text="Time:"/>
+        <ComboBox fx:id="periodComboBox" promptText="ทั้งหมด"/>
 
-        <Button text="ค้นหา" onAction="#handleSearch"
+        <Button text="Search" onAction="#handleSearch"
                 style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
     </HBox>
 
     <!-- ตารางแสดงประวัติการยืม -->
     <TableView fx:id="historyTableView" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="borrowIdColumn" text="เลขที่การยืม" prefWidth="100"/>
-            <TableColumn fx:id="bookTitleColumn" text="ชื่อหนังสือ" prefWidth="250"/>
-            <TableColumn fx:id="borrowDateColumn" text="วันที่ยืม" prefWidth="150"/>
-            <TableColumn fx:id="returnDateColumn" text="วันที่คืน" prefWidth="150"/>
-            <TableColumn fx:id="statusColumn" text="สถานะ" prefWidth="100"/>
+            <TableColumn fx:id="borrowIdColumn" text="Borrowing Id" prefWidth="100"/>
+            <TableColumn fx:id="bookTitleColumn" text="Title" prefWidth="250"/>
+            <TableColumn fx:id="borrowDateColumn" text="Date" prefWidth="150"/>
+            <TableColumn fx:id="returnDateColumn" text="Due date" prefWidth="150"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
         </columns>
         <placeholder>
-            <Label text="ไม่มีประวัติการยืมหนังสือ" />
+            <Label text="No history of borrowing books" />
         </placeholder>
     </TableView>
 </VBox>

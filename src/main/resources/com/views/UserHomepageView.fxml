@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<ScrollPane xmlns="http://javafx.com/javafx/23.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.library.controllers.UserHomepageController"
             fitToWidth="true"
             fitToHeight="true"
@@ -13,35 +13,37 @@
 
     <VBox spacing="20" style="-fx-padding: 20;">
         <!-- หัวข้อ -->
-        <Label text="Welcome to the library system." style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label text="Welcome to the library " style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
         <!-- ช่องค้นหาหนังสือ -->
         <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="searchField" promptText="ค้นหาหนังสือ..." prefWidth="400"
-                       style="-fx-padding: 10; -fx-font-size: 14;"/>
-            <Button text="Search" onAction="#handleSearch"
-                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14;"/>
+            <TextField fx:id="searchField" promptText="Search..." prefWidth="400"
+                       style="-fx-padding: 10; -fx-font-size: 14; -fx-background-radius: 20;"/>
+            <Button text="ค้นหา" onAction="#handleSearch"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 20;"/>
         </HBox>
 
         <!-- หนังสือแนะนำ -->
-        <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
-            <Label text="Recommended books" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+        <VBox style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 1);">
+            <Label text="Recommended books" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
             <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="NEVER"
-                        style="-fx-background-color: transparent;" fitToHeight="true">
+                        style="-fx-background-color: transparent;" fitToHeight="true" minHeight="250">
                 <HBox fx:id="featuredBooksBox" spacing="15" style="-fx-padding: 10;"/>
             </ScrollPane>
         </VBox>
 
         <!-- หนังสือที่มีพร้อมให้ยืม -->
-        <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
-            <Label text="Books available to borrow" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
-            <TableView fx:id="availableBooksTable" VBox.vgrow="ALWAYS">
+        <VBox style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 1);">
+            <Label text="Books that are ready" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
+            <TableView fx:id="availableBooksTable" VBox.vgrow="ALWAYS" minHeight="300">
                 <columns>
-                    <TableColumn fx:id="idColumn" text="ID" prefWidth="100"/>
+                    <TableColumn fx:id="idColumn" text="Id" prefWidth="100"/>
                     <TableColumn fx:id="titleColumn" text="Title" prefWidth="250"/>
-                    <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+                    <TableColumn fx:id="authorColumn" text="author" prefWidth="150"/>
                     <TableColumn fx:id="categoryColumn" text="Category" prefWidth="100"/>
-                    <TableColumn fx:id="actionColumn" text="progress" prefWidth="120"/>
+                    <TableColumn fx:id="actionColumn" text="Progess" prefWidth="120"/>
                 </columns>
             </TableView>
         </VBox>
