@@ -5,13 +5,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+
 public class UserMainController {
-    @FXML private Label usernameLabel;
-    @FXML private StackPane contentArea;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private StackPane contentArea;
 
     private LibraryDataManager dataManager;
 
@@ -55,8 +61,23 @@ public class UserMainController {
     }
 
     @FXML
-    private void showMyBorrows() {
-        loadContent("/com/views/UserMyBorrowsView.fxml");
+    private void showBorrowReturn() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/BorrowReturnView.fxml"));
+            Parent borrowReturnView = loader.load();
+
+            // โหลดและแสดงหน้าการยืมคืนในพื้นที่เนื้อหา
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(borrowReturnView);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ข้อผิดพลาด");
+            alert.setHeaderText("ไม่สามารถโหลดหน้ายืมคืนหนังสือ");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -66,17 +87,21 @@ public class UserMainController {
 
     @FXML
     private void showProfile() {
-        loadContent("/com/views/UserProfileView.fxml");
+        // ใช้ getResource กับ views
+        loadContent("/views/UserProfileView.fxml");
     }
+
 
     private void loadContent(String fxmlPath) {
         try {
+            System.out.println("Loading FXML from path: " + fxmlPath);
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
             contentArea.getChildren().clear();
             contentArea.getChildren().add(view);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Cannot find FXML resource: " + fxmlPath);
         }
     }
 }

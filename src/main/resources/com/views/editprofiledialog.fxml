@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.EditProfileController"
+      spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <VBox alignment="CENTER" spacing="10">
+        <Label text="แก้ไขโปรไฟล์" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+    </VBox>
+
+    <VBox fx:id="editProfileContainer"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
+          maxWidth="350"
+          spacing="15">
+
+        <Label text="ชื่อผู้ใช้" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="usernameField" editable="false"/>
+
+        <Label text="ชื่อ" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="nameField" promptText="กรอกชื่อ"/>
+
+        <Label text="บทบาท" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="roleComboBox" maxWidth="Infinity" promptText="เลือกบทบาท"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="บันทึก"
+                    onAction="#handleSave"
+                    style="-fx-background-color: #3F51B5; -fx-text-fill: white;"/>
+
+            <Button text="ยกเลิก"
+                    onAction="#handleCancel"
+                    style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+</VBox>

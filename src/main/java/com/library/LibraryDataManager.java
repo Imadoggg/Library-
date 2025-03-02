@@ -44,8 +44,8 @@ public class LibraryDataManager {
         );
 
         // เพิ่มผู้ใช้ตัวอย่าง
-        users.add(new User("admin", "admin", UserRole.ADMIN, "ผู้ดูแลระบบ"));
-        users.add(new User("user", "user", UserRole.USER, "ผู้ใช้ทั่วไป"));
+        users.add(new User("admin", "admin", UserRole.ADMIN, "ผู้ดูแลระบบ", "admin@library.com"));
+        users.add(new User("user", "user", UserRole.USER, "ผู้ใช้ทั่วไป", "user@library.com"));
     }
 
     public static LibraryDataManager getInstance() {
@@ -97,6 +97,7 @@ public class LibraryDataManager {
         }
         return new ArrayList<>(books);
     }
+
     public List<Member> getAllMembers() {
         if (members == null) {
             members = FXCollections.observableArrayList();
@@ -104,6 +105,7 @@ public class LibraryDataManager {
         }
         return new ArrayList<>(members);
     }
+
     public List<BorrowRecord> getAllBorrowRecords() {
         if (borrowRecords == null) {
             borrowRecords = FXCollections.observableArrayList();
@@ -111,6 +113,7 @@ public class LibraryDataManager {
         }
         return new ArrayList<>(borrowRecords);
     }
+
     // เพิ่มเมธอด addMemberUpdateListener และ addBookUpdateListener
     public void addMemberUpdateListener(Runnable listener) {
         memberUpdateListeners.add(listener);
@@ -228,4 +231,21 @@ public class LibraryDataManager {
         System.out.println("LibraryDataManager has been reset");
     }
 
+
+    public void updateUser(User user) {
+        // ตรวจสอบว่ามีผู้ใช้นี้อยู่ในระบบหรือไม่
+        User existingUser = users.stream()
+                .filter(u -> u.getUsername().equals(user.getUsername()))
+                .findFirst()
+                .orElse(null);
+
+        if (existingUser != null) {
+            // อัพเดทข้อมูล
+            existingUser.setName(user.getName());
+            existingUser.setPassword(user.getPassword());
+            System.out.println("อัพเดทข้อมูลผู้ใช้ " + user.getUsername() + " เรียบร้อยแล้ว");
+        } else {
+            System.err.println("ไม่พบผู้ใช้ " + user.getUsername() + " ในระบบ");
+        }
+    }
 }

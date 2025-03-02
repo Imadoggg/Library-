@@ -13,9 +13,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 import java.time.format.DateTimeFormatter;
 
+
 public class BorrowReturnController {
     @FXML private ComboBox<Member> memberComboBox;
     @FXML private ComboBox<Book> bookComboBox;
+    @FXML private Button borrowButton; // เพิ่มการประกาศตัวแปรนี้
     @FXML private TableView<BorrowRecord> borrowedBooksTable;
     @FXML private TableColumn<BorrowRecord, String> borrowIdColumn;
     @FXML private TableColumn<BorrowRecord, String> memberNameColumn;
@@ -24,112 +26,112 @@ public class BorrowReturnController {
     @FXML private TableColumn<BorrowRecord, Void> actionColumn;
 
     private LibraryDataManager dataManager;
-    private ObservableList<BorrowRecord> borrowRecordList;
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML
     public void initialize() {
-        dataManager = LibraryDataManager.getInstance();
-        borrowRecordList = FXCollections.observableArrayList();
+        try {
+            dataManager = LibraryDataManager.getInstance();
 
-        setupComboBoxes();
-        setupTableColumns();
-        refreshBorrowedBooks();
+            // ตั้งค่า ComboBox
+            setupComboBoxes();
 
-        // เพิ่ม Listener สำหรับการอัพเดทข้อมูล
-        dataManager.addMemberUpdateListener(this::refreshMembers);
-        dataManager.addBookUpdateListener(this::refreshBooks);
-    }
+            // ตั้งค่า TableView
+            setupTableColumns();
 
-    private void setupComboBoxes() {
-        refreshMembers();
-        refreshBooks();
-
-        // Setup member combo box converter
-        memberComboBox.setConverter(new StringConverter<Member>() {
-            @Override
-            public String toString(Member member) {
-                return member == null ? "" : member.getName() + " (" + member.getId() + ")";
-            }
-
-            @Override
-            public Member fromString(String string) {
-                return null;
-            }
-        });
-
-        // Setup book combo box converter
-        bookComboBox.setConverter(new StringConverter<Book>() {
-            @Override
-            public String toString(Book book) {
-                return book == null ? "" : book.getTitle() + " (" + book.getId() + ")";
-            }
-
-            @Override
-            public Book fromString(String string) {
-                return null;
-            }
-        });
-    }
-
-    private void setupTableColumns() {
-        // Setup basic columns with PropertyValueFactory
-        borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        memberNameColumn.setCellValueFactory(cellData -> cellData.getValue().getMember().nameProperty());
-        bookTitleColumn.setCellValueFactory(cellData -> cellData.getValue().getBook().titleProperty());
-        borrowDateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getFormattedBorrowDate()));
-
-        // Setup return button in action column
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button returnButton = new Button("Return");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    BorrowRecord record = getTableView().getItems().get(getIndex());
-                    returnButton.setDisable(record.isReturned());
-                    returnButton.setOnAction(event -> handleReturnBook(record));
-                    setGraphic(returnButton);
-                }
-            }
-        });
-    }
-
-
-    public void refreshMembers() {
-        Member selectedMember = memberComboBox.getValue();
-        memberComboBox.setItems(FXCollections.observableArrayList(dataManager.getAllMembers()));
-        if (selectedMember != null) {
-            memberComboBox.setValue(selectedMember);
+            // โหลดข้อมูลการยืม
+            refreshBorrowedBooks();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("เกิดข้อผิดพลาดในการเริ่มต้นหน้ายืม-คืน: " + e.getMessage());
         }
     }
 
-    public void refreshBooks() {
-        Book selectedBook = bookComboBox.getValue();
-        bookComboBox.setItems(FXCollections.observableArrayList(
-                dataManager.getAllBooks().stream()
-                        .filter(Book::isAvailable)
-                        .toList()
-        ));
-        if (selectedBook != null && selectedBook.isAvailable()) {
-            bookComboBox.setValue(selectedBook);
+    private void setupComboBoxes() {
+        // ตั้งค่า memberComboBox
+        if (memberComboBox != null) {
+            memberComboBox.setItems(FXCollections.observableArrayList(dataManager.getAllMembers()));
+            memberComboBox.setConverter(new javafx.util.StringConverter<Member>() {
+                @Override
+                public String toString(Member member) {
+                    return member == null ? "" : member.getName() + " (" + member.getId() + ")";
+                }
+
+                @Override
+                public Member fromString(String string) {
+                    return null;
+                }
+            });
+        }
+
+        // ตั้งค่า bookComboBox
+        if (bookComboBox != null) {
+            // แสดงเฉพาะหนังสือที่พร้อมให้ยืม
+            bookComboBox.setItems(FXCollections.observableArrayList(
+                    dataManager.getAllBooks().stream()
+                            .filter(Book::isAvailable)
+                            .toList()
+            ));
+            bookComboBox.setConverter(new javafx.util.StringConverter<Book>() {
+                @Override
+                public String toString(Book book) {
+                    return book == null ? "" : book.getTitle() + " (" + book.getId() + ")";
+                }
+
+                @Override
+                public Book fromString(String string) {
+                    return null;
+                }
+            });
+        }
+    }
+
+    private void setupTableColumns() {
+        if (borrowedBooksTable != null) {
+            // ตั้งค่าคอลัมน์
+            borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            memberNameColumn.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getMember().getName()));
+            bookTitleColumn.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getBook().getTitle()));
+            borrowDateColumn.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getFormattedBorrowDate()));
+
+            // ตั้งค่าปุ่มคืนหนังสือในคอลัมน์ actionColumn
+            actionColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button returnButton = new Button("คืนหนังสือ");
+
+                {
+                    returnButton.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
+                    returnButton.setOnAction(event -> {
+                        BorrowRecord record = getTableView().getItems().get(getIndex());
+                        handleReturnBook(record);
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        BorrowRecord record = getTableView().getItems().get(getIndex());
+                        returnButton.setDisable(record.isReturned());
+                        setGraphic(returnButton);
+                    }
+                }
+            });
         }
     }
 
     private void refreshBorrowedBooks() {
-        borrowRecordList.clear();
-        // แสดงเฉพาะรายการที่ยังไม่ได้คืน
-        borrowRecordList.addAll(
-                dataManager.getAllBorrowRecords().stream()
-                        .filter(record -> !record.isReturned())
-                        .toList()
-        );
-        borrowedBooksTable.setItems(borrowRecordList);
+        if (borrowedBooksTable != null) {
+            // แสดงเฉพาะรายการที่ยังไม่คืน
+            borrowedBooksTable.setItems(FXCollections.observableArrayList(
+                    dataManager.getAllBorrowRecords().stream()
+                            .filter(record -> !record.isReturned())
+                            .toList()
+            ));
+        }
     }
 
     @FXML
@@ -138,7 +140,7 @@ public class BorrowReturnController {
         Book selectedBook = bookComboBox.getValue();
 
         if (selectedMember == null || selectedBook == null) {
-            showAlert("Please select member and book", Alert.AlertType.WARNING);
+            showError("กรุณาเลือกสมาชิกและหนังสือ");
             return;
         }
 
@@ -148,33 +150,73 @@ public class BorrowReturnController {
         );
 
         if (newRecord != null) {
-            showAlert("Book borrowed successfully", Alert.AlertType.INFORMATION);
+            showInfo("ยืมหนังสือสำเร็จ");
             refreshBorrowedBooks();
-            refreshBooks(); // refresh available books
+            refreshBooks(); // รีเฟรชรายการหนังสือที่พร้อมให้ยืม
 
-            // Clear selections
+            // ล้างค่า
             memberComboBox.setValue(null);
             bookComboBox.setValue(null);
         } else {
-            showAlert("Failed to borrow book", Alert.AlertType.ERROR);
+            showError("ไม่สามารถยืมหนังสือได้");
         }
     }
 
     private void handleReturnBook(BorrowRecord record) {
         if (dataManager.returnBook(record.getId())) {
-            showAlert("Book returned successfully", Alert.AlertType.INFORMATION);
+            showInfo("คืนหนังสือสำเร็จ");
             refreshBorrowedBooks();
-            refreshBooks(); // refresh available books
+            refreshBooks(); // รีเฟรชรายการหนังสือที่พร้อมให้ยืม
         } else {
-            showAlert("Failed to return book", Alert.AlertType.ERROR);
+            showError("ไม่สามารถคืนหนังสือได้");
         }
     }
 
-    private void showAlert(String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle("Library System");
+    private void refreshBooks() {
+        bookComboBox.setItems(FXCollections.observableArrayList(
+                dataManager.getAllBooks().stream()
+                        .filter(Book::isAvailable)
+                        .toList()
+        ));
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ข้อผิดพลาด");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void showInfo(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("แจ้งเตือน");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    // เพิ่ม inner class ที่จำเป็น
+    private static class StringConverter<T> extends javafx.util.StringConverter<T> {
+        @Override
+        public String toString(T object) {
+            return object == null ? "" : object.toString();
+        }
+
+        @Override
+        public T fromString(String string) {
+            return null;
+        }
+    }
+
+    @FXML
+    public void validateBorrowInputs() {
+        // ตรวจสอบว่าทั้งสมาชิกและหนังสือถูกเลือกแล้วหรือไม่
+        boolean isValid = memberComboBox.getValue() != null && bookComboBox.getValue() != null;
+
+        // ถ้าหากทั้งสมาชิกและหนังสือถูกเลือกแล้ว ให้เปิดใช้งานปุ่มยืม
+        if (borrowButton != null) { // เพิ่มการตรวจสอบเพื่อป้องกัน NullPointerException
+            borrowButton.setDisable(!isValid);
+        }
     }
 }

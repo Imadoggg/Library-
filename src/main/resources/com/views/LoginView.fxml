@@ -44,8 +44,8 @@
     <!-- ข้อมูลผู้ใช้ตัวอย่าง -->
     <VBox style="-fx-padding: 10;" spacing="5">
         <Label text="example:" style="-fx-font-weight: bold;"/>
-        <Label text="Admin: username = admin, password = admin"/>
-        <Label text="User: username = user, password = user"/>
+        <Label text="Admin: admin, password = admin"/>
+        <Label text="User:  user, password = user"/>
     </VBox>
 
 </VBox>

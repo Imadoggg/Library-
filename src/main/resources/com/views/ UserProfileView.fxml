@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.UserProfileController"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <!-- หัวข้อ -->
+    <Label text="ข้อมูลโปรไฟล์" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;" spacing="15">
+        <GridPane vgap="15" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+
+            <Label text="ชื่อผู้ใช้:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+            <Label fx:id="usernameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+            <Label text="ชื่อ-นามสกุล:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+            <TextField fx:id="nameField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+            <Label text="รหัสผ่านปัจจุบัน:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+            <PasswordField fx:id="currentPasswordField" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+            <Label text="รหัสผ่านใหม่:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+            <PasswordField fx:id="newPasswordField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+            <Label text="ยืนยันรหัสผ่านใหม่:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+            <PasswordField fx:id="confirmPasswordField" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+        </GridPane>
+
+        <Label fx:id="errorLabel" textFill="RED" visible="false" />
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="บันทึกการเปลี่ยนแปลง" onAction="#handleSaveProfile"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white;" />
+        </HBox>
+    </VBox>
+</VBox>

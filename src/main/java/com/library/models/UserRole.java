@@ -4,18 +4,26 @@ public enum UserRole {
     ADMIN("ผู้ดูแลระบบ"),
     USER("ผู้ใช้งาน");
 
-    private final String displayName;
 
-    UserRole(String displayName) {
-        this.displayName = displayName;
+    private final String thaiDescription;
+
+
+
+    UserRole(String thaiDescription) {
+        this.thaiDescription = thaiDescription;
     }
 
     public String getDisplayName() {
-        return displayName;
+        return thaiDescription;
+    }
+
+
+    public String getThaiDescription() {
+        return thaiDescription;
     }
 
     @Override
     public String toString() {
-        return displayName;
+        return thaiDescription;
     }
 }

@@ -7,48 +7,40 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.library.controllers.BorrowReturnController"
-      spacing="10"
-      style="-fx-padding: 10;">
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
 
-    <!-- ส่วนยืมหนังสือ -->
-    <TitledPane text="Borrowed Book" expanded="true">
-        <VBox spacing="10">
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <ComboBox fx:id="memberComboBox"
-                          promptText="เลือกสมาชิก"
-                          prefWidth="200"
-                          onAction="#validateBorrowInputs"/>
+    <!-- ลบปุ่มนำทางเพื่อแก้ปัญหา -->
 
-                <ComboBox fx:id="bookComboBox"
-                          promptText="เลือกหนังสือ"
-                          prefWidth="200"
-                          onAction="#validateBorrowInputs"/>
+    <!-- ส่วนของการยืมหนังสือ -->
+    <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
+        <Label text="ยืมหนังสือ" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-                <Button fx:id="borrowButton"
-                        text="ยืมหนังสือ"
-                        onAction="#handleBorrowBook"
-                        disable="true"/>
-            </HBox>
-        </VBox>
-    </TitledPane>
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding-top: 10;">
+            <ComboBox fx:id="memberComboBox" promptText="เลือกสมาชิก" prefWidth="180"/>
+            <ComboBox fx:id="bookComboBox" promptText="เลือกหนังสือ" prefWidth="180"/>
+            <Button text="ยืมหนังสือ"
+                    onAction="#handleBorrowBook"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
 
-    <!-- ส่วนคืนหนังสือ -->
-    <TitledPane text="คืนหนังสือ" expanded="true">
-        <VBox spacing="10">
-            <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="borrowIdColumn" text="Borrow ID" prefWidth="100"/>
-                    <TableColumn fx:id="memberNameColumn" text="Member" prefWidth="150"/>
-                    <TableColumn fx:id="bookTitleColumn" text="Book Title" prefWidth="200"/>
-                    <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150"/>
-                    <TableColumn fx:id="actionColumn" text="Process" prefWidth="100">
-                        <cellFactory>
-                            <fx:callback fx:id="returnBookButtonFactory"/>
-                        </cellFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
-        </VBox>
-    </TitledPane>
+    <!-- ส่วนของการคืนหนังสือ -->
+    <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
+        <Label text="หนังสือที่ยืมอยู่" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
+        <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS"
+                   style="-fx-background-color: transparent;">
+            <columns>
+                <TableColumn fx:id="borrowIdColumn" text="รหัสการยืม" prefWidth="100"/>
+                <TableColumn fx:id="memberNameColumn" text="ผู้ยืม" prefWidth="150"/>
+                <TableColumn fx:id="bookTitleColumn" text="ชื่อหนังสือ" prefWidth="200"/>
+                <TableColumn fx:id="borrowDateColumn" text="วันที่ยืม" prefWidth="150"/>
+                <TableColumn fx:id="actionColumn" text="ดำเนินการ" prefWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="ไม่มีรายการยืมหนังสือในขณะนี้" />
+            </placeholder>
+        </TableView>
+    </VBox>
 </VBox>

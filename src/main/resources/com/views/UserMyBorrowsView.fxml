@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.UserMyBorrowsController"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <!-- หัวข้อ -->
+    <Label text="รายการหนังสือที่ยืมในปัจจุบัน" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <!-- ตารางแสดงหนังสือที่ยืม -->
+    <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="borrowIdColumn" text="เลขที่การยืม" prefWidth="100"/>
+            <TableColumn fx:id="bookTitleColumn" text="ชื่อหนังสือ" prefWidth="250"/>
+            <TableColumn fx:id="borrowDateColumn" text="วันที่ยืม" prefWidth="150"/>
+            <TableColumn fx:id="dueDateColumn" text="กำหนดคืน" prefWidth="150"/>
+            <TableColumn fx:id="statusColumn" text="สถานะ" prefWidth="100"/>
+        </columns>
+        <placeholder>
+            <Label text="ไม่มีรายการหนังสือที่ยืมในปัจจุบัน" />
+        </placeholder>
+    </TableView>
+</VBox>
