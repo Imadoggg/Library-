@@ -52,6 +52,10 @@
                 <configuration>
                     <source>23</source>
                     <target>23</target>
+                    <compilerArgs>
+                        <arg>--module-path</arg>
+                        <arg>${project.build.directory}/classes</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -59,7 +63,13 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>demo1/com.library.LibraryApplication</mainClass>
+                    <mainClass>com.library.LibraryApplication</mainClass>
+                    <options>
+                        <option>--add-modules</option>
+                        <option>ALL-MODULE-PATH</option>
+                        <option>--add-opens</option>
+                        <option>java.base/java.lang=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

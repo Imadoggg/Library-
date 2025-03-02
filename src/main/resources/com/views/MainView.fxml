@@ -12,52 +12,26 @@
 
     <MenuBar>
         <Menu text="ห้องสมุดโย้ๆ">
-            <MenuItem text="ออกจากระบบ/ปิดโปรแกรม" onAction="#handleExit"/>
+            <MenuItem text="ออกจากโปรแกรม" onAction="#handleExit"/>
         </Menu>
     </MenuBar>
 
     <TabPane fx:id="mainTabPane" VBox.vgrow="ALWAYS">
-        <Tab text="เข้าสู่ระบบ" fx:id="loginTab" closable="false">
-            <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
-                <Label text="เข้าสู่ระบบ" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-
-                <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
-                      maxWidth="350" spacing="15">
-                    <Label text="ชื่อผู้ใช้" style="-fx-font-weight: bold;"/>
-                    <TextField fx:id="usernameField" promptText="ชื่อผู้ใช้"/>
-
-                    <Label text="รหัสผ่าน" style="-fx-font-weight: bold;"/>
-                    <PasswordField fx:id="passwordField" promptText="รหัสผ่าน"/>
-
-                    <Label fx:id="errorLabel" textFill="RED" visible="false"/>
-
-                    <Button text="เข้าสู่ระบบ"
-                            onAction="#handleLogin"
-                            style="-fx-background-color: #3F51B5; -fx-text-fill: white;"
-                            maxWidth="Infinity"/>
-                </VBox>
-
-                <!-- ข้อมูลผู้ใช้ตัวอย่าง -->
-                <HBox style="-fx-padding: 10;" spacing="20" alignment="CENTER">
-                    <VBox>
-                        <Label text="Admin:" style="-fx-font-weight: bold;"/>
-                        <Label text="username: admin"/>
-                        <Label text="password: admin"/>
-                    </VBox>
-                    <VBox>
-                        <Label text="User:" style="-fx-font-weight: bold;"/>
-                        <Label text="username: user"/>
-                        <Label text="password: user"/>
-                    </VBox>
-                </HBox>
-            </VBox>
-        </Tab>
-
-        <!-- แท็บเดิมยังคงอยู่ แต่เราจะซ่อน/แสดงตามสิทธิ์ภายหลัง -->
-        <Tab text="จัดการหนังสือ" fx:id="bookTab" closable="false">
+        <Tab text="จัดการหนังสือ" closable="false">
             <content>
                 <fx:include source="BookManagementView.fxml"/>
             </content>
         </Tab>
-        <!-- แท็บอื่นๆ ยังคงเหมือนเดิม -->
+        <Tab text="จัดการสมาชิก" closable="false">
+            <content>
+                <fx:include source="MemberManagementView.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="ยืม-คืนหนังสือ" closable="false">
+            <content>
+                <fx:include source="BorrowReturnView.fxml"/>
+            </content>
+        </Tab>
     </TabPane>
+
+</VBox>

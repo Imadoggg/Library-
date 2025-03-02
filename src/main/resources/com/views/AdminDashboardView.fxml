@@ -14,7 +14,7 @@
 
     <VBox spacing="20" style="-fx-padding: 20;">
         <!-- หัวข้อ -->
-        <Label text="แดชบอร์ด" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label text="Dashboard" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
         <!-- การ์ดข้อมูลสรุป -->
         <GridPane hgap="20" vgap="20">
@@ -30,7 +30,7 @@
                     <Label fx:id="totalBooksLabel"
                            style="-fx-font-size: 28; -fx-text-fill: #2196F3;"/>
                     <VBox>
-                        <Label text="หนังสือทั้งหมด" style="-fx-font-weight: bold;"/>
+                        <Label text="Book" style="-fx-font-weight: bold;"/>
                         <Label fx:id="availableBooksLabel" style="-fx-text-fill: #757575;"/>
                     </VBox>
                 </HBox>
@@ -43,7 +43,7 @@
                     <Label fx:id="totalMembersLabel"
                            style="-fx-font-size: 28; -fx-text-fill: #4CAF50;"/>
                     <VBox>
-                        <Label text="สมาชิกทั้งหมด" style="-fx-font-weight: bold;"/>
+                        <Label text="Member" style="-fx-font-weight: bold;"/>
                         <Label text="สมาชิกใหม่ 0 คนในเดือนนี้" style="-fx-text-fill: #757575;"/>
                     </VBox>
                 </HBox>
@@ -56,7 +56,7 @@
                     <Label fx:id="currentBorrowsLabel"
                            style="-fx-font-size: 28; -fx-text-fill: #FF9800;"/>
                     <VBox>
-                        <Label text="การยืมที่กำลังดำเนินอยู่" style="-fx-font-weight: bold;"/>
+                        <Label text="overdueBorrows" style="-fx-font-weight: bold;"/>
                         <Label fx:id="overdueBorrowsLabel" style="-fx-text-fill: #757575;"/>
                     </VBox>
                 </HBox>
@@ -69,7 +69,7 @@
                     <Label fx:id="totalBorrowsLabel"
                            style="-fx-font-size: 28; -fx-text-fill: #F44336;"/>
                     <VBox>
-                        <Label text="การยืมทั้งหมด" style="-fx-font-weight: bold;"/>
+                        <Label text="Borrows" style="-fx-font-weight: bold;"/>
                         <Label text="เดือนนี้ 0 รายการ" style="-fx-text-fill: #757575;"/>
                     </VBox>
                 </HBox>
@@ -81,14 +81,15 @@
             <!-- กราฟวงกลมหมวดหมู่หนังสือ -->
             <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;"
                   HBox.hgrow="ALWAYS" prefWidth="400">
-                <Label text="สัดส่วนหนังสือตามหมวดหมู่" style="-fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+                <Label text="Books by category
+่" style="-fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
                 <PieChart fx:id="bookCategoryChart" legendVisible="true"/>
             </VBox>
 
             <!-- หนังสือยอดนิยม -->
             <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;"
                   HBox.hgrow="ALWAYS" prefWidth="300">
-                <Label text="หนังสือยอดนิยม" style="-fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+                <Label text="PopularBooks" style="-fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
                 <ListView fx:id="popularBooksListView" VBox.vgrow="ALWAYS"/>
             </VBox>
         </HBox>

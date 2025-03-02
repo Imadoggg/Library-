@@ -13,11 +13,11 @@
     <top>
         <HBox style="-fx-background-color: #2196F3; -fx-padding: 10;"
               alignment="CENTER_LEFT" spacing="10">
-            <Label text="ระบบห้องสมุด - ผู้ใช้งาน"
+            <Label text="User"
                    style="-fx-text-fill: white; -fx-font-size: 18;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="usernameLabel" style="-fx-text-fill: white;"/>
-            <Button text="ออกจากระบบ" onAction="#handleLogout"
+            <Button text="Logout" onAction="#handleLogout"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
         </HBox>
     </top>
@@ -25,12 +25,12 @@
     <!-- แถบนำทางด้านซ้าย -->
     <left>
         <VBox style="-fx-background-color: white; -fx-padding: 10;" spacing="5" prefWidth="200">
-            <Button text="หน้าหลัก" maxWidth="Infinity" onAction="#showHomepage"
+            <Button text="Main" maxWidth="Infinity" onAction="#showHomepage"
                     style="-fx-background-color: #64B5F6; -fx-text-fill: white;"/>
-            <Button text="ค้นหาหนังสือ" maxWidth="Infinity" onAction="#showBookSearch"/>
-            <Button text="หนังสือที่ยืม" maxWidth="Infinity" onAction="#showMyBorrows"/>
-            <Button text="ประวัติการยืม" maxWidth="Infinity" onAction="#showBorrowHistory"/>
-            <Button text="โปรไฟล์" maxWidth="Infinity" onAction="#showProfile"/>
+            <Button text="FindBook" maxWidth="Infinity" onAction="#showBookSearch"/>
+            <Button text="BrrowedBook" maxWidth="Infinity" onAction="#showMyBorrows"/>
+            <Button text="Histroly" maxWidth="Infinity" onAction="#showBorrowHistory"/>
+            <Button text="Profile" maxWidth="Infinity" onAction="#showProfile"/>
         </VBox>
     </left>
 

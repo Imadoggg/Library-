@@ -5,12 +5,18 @@ import com.library.models.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -143,6 +149,52 @@ public class UserHomepageController {
         );
         alert.showAndWait();
 
-        // ในระบบจริงควรนำไปยังหน้าแสดงรายละเอียดหนังสือเต็มๆ
+
+    }
+    @FXML
+    private void openBorrowPage() {
+        try {
+            // ตรวจสอบว่ามี mainBorderPane หรือไม่
+            BorderPane mainBorderPane = (BorderPane) searchField.getScene().getRoot();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/BorrowReturnView.fxml"));
+            Parent borrowView = loader.load();
+
+            // วางหน้ายืมหนังสือตรงส่วนกลางของ BorderPane
+            mainBorderPane.setCenter(borrowView);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            // แสดง Alert หากโหลดหน้าไม่สำเร็จ
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ข้อผิดพลาด");
+            alert.setHeaderText("ไม่สามารถโหลดหน้ายืมหนังสือได้");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+    @FXML
+    private void handleLogout() {
+        try {
+            // โหลดหน้า Login
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/LoginView.fxml"));
+            Parent loginView = loader.load();
+
+            // ดึง Stage ปัจจุบัน
+            Stage stage = (Stage) searchField.getScene().getWindow();
+            stage.setScene(new Scene(loginView, 600, 400));
+            stage.setTitle("ระบบจัดการห้องสมุด - เข้าสู่ระบบ");
+
+            // ล้างข้อมูลผู้ใช้ปัจจุบัน
+            LibraryDataManager.getInstance().logout();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ข้อผิดพลาด");
+            alert.setHeaderText("ไม่สามารถออกจากระบบได้");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 }

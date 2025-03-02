@@ -11,19 +11,23 @@
       style="-fx-padding: 10;">
 
     <!-- ส่วนยืมหนังสือ -->
-    <TitledPane text="ยืมหนังสือ" expanded="true">
+    <TitledPane text="Borrowed Book" expanded="true">
         <VBox spacing="10">
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <ComboBox fx:id="memberComboBox"
                           promptText="เลือกสมาชิก"
-                          prefWidth="200"/>
+                          prefWidth="200"
+                          onAction="#validateBorrowInputs"/>
 
                 <ComboBox fx:id="bookComboBox"
                           promptText="เลือกหนังสือ"
-                          prefWidth="200"/>
+                          prefWidth="200"
+                          onAction="#validateBorrowInputs"/>
 
-                <Button text="ยืมหนังสือ"
-                        onAction="#handleBorrowBook"/>
+                <Button fx:id="borrowButton"
+                        text="ยืมหนังสือ"
+                        onAction="#handleBorrowBook"
+                        disable="true"/>
             </HBox>
         </VBox>
     </TitledPane>
@@ -37,7 +41,11 @@
                     <TableColumn fx:id="memberNameColumn" text="Member" prefWidth="150"/>
                     <TableColumn fx:id="bookTitleColumn" text="Book Title" prefWidth="200"/>
                     <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150"/>
-                    <TableColumn fx:id="actionColumn" text="Process" prefWidth="100"/>
+                    <TableColumn fx:id="actionColumn" text="Process" prefWidth="100">
+                        <cellFactory>
+                            <fx:callback fx:id="returnBookButtonFactory"/>
+                        </cellFactory>
+                    </TableColumn>
                 </columns>
             </TableView>
         </VBox>

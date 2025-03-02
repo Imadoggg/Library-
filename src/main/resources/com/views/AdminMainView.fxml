@@ -13,7 +13,7 @@
     <top>
         <HBox style="-fx-background-color: #3F51B5; -fx-padding: 10;"
               alignment="CENTER_LEFT" spacing="10">
-            <Label text="ระบบจัดการห้องสมุด - ผู้ดูแลระบบ"
+            <Label text="ระบบจัดการห้องสมุด - Admin"
                    style="-fx-text-fill: white; -fx-font-size: 18;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="usernameLabel" style="-fx-text-fill: white;"/>

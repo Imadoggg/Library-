@@ -11,7 +11,7 @@
       style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
 
     <!-- หัวข้อ -->
-    <Label text="ค้นหาหนังสือ" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+    <Label text="Search" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
     <!-- ตัวกรองค้นหา -->
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 5;">
@@ -22,7 +22,7 @@
 
         <CheckBox fx:id="availableOnlyCheckBox" text="แสดงเฉพาะหนังสือที่พร้อมให้ยืม"/>
 
-        <Button text="ค้นหา" onAction="#handleSearch"
+        <Button text="Search" onAction="#handleSearch"
                 style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
     </HBox>
 

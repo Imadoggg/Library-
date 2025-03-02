@@ -115,7 +115,18 @@ public class UserBookSearchController {
         Set<String> categories = new HashSet<>();
         categories.add("ทั้งหมด");
 
-        dataManager.getAllBooks().forEach(book -> categories.add(book.getCategory()));
+        List<Book> allBooks = dataManager.getAllBooks();
+        if (allBooks != null && !allBooks.isEmpty()) {
+            for (Book book : allBooks) {
+                if (book != null && book.getCategory() != null) {
+                    categories.add(book.getCategory());
+                }
+            }
+
+            System.out.println("พบหนังสือทั้งหมด " + allBooks.size() + " เล่ม");
+        } else {
+            System.out.println("ไม่พบข้อมูลหนังสือ");
+        }
 
         categoryComboBox.setItems(FXCollections.observableArrayList(categories));
         categoryComboBox.setValue("ทั้งหมด");

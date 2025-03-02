@@ -3,32 +3,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.library.controllers.LoginCon   troller"
+      fx:controller="com.library.controllers.LoginController"
       spacing="15"
       alignment="CENTER"
       style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
 
     <VBox alignment="CENTER" spacing="10">
-        <Text text="ระบบจัดการห้องสมุด" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-        <Text text="กรุณาเข้าสู่ระบบ" style="-fx-font-size: 14; -fx-fill: #757575;"/>
+        <Label fx:id="titleLabel" text="Library" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label fx:id="subtitleLabel" text="กรุณาเข้าสู่ระบบ" style="-fx-font-size: 14;"/>
     </VBox>
 
-    <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
-          maxWidth="350" spacing="15">
+    <VBox fx:id="loginFormContainer"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
+          maxWidth="350"
+          spacing="15"
+          alignment="CENTER_LEFT">
 
-        <Label text="ชื่อผู้ใช้" style="-fx-font-weight: bold;"/>
-        <TextField fx:id="usernameField" promptText="ชื่อผู้ใช้"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Username" style="-fx-font-weight: bold; -fx-min-width: 100;"/>
+            <TextField fx:id="usernameField" promptText="Username" HBox.hgrow="ALWAYS"/>
+        </HBox>
 
-        <Label text="รหัสผ่าน" style="-fx-font-weight: bold;"/>
-        <PasswordField fx:id="passwordField" promptText="รหัสผ่าน"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Password" style="-fx-font-weight: bold; -fx-min-width: 100;"/>
+            <PasswordField fx:id="passwordField" promptText="Password" HBox.hgrow="ALWAYS"/>
+        </HBox>
 
         <Label fx:id="errorLabel" textFill="RED" visible="false"/>
 
-        <Button text="เข้าสู่ระบบ"
+        <Button fx:id="loginButton"
+                text="Login"
                 onAction="#handleLogin"
                 style="-fx-background-color: #3F51B5; -fx-text-fill: white;"
                 maxWidth="Infinity"/>
@@ -36,9 +43,9 @@
 
     <!-- ข้อมูลผู้ใช้ตัวอย่าง -->
     <VBox style="-fx-padding: 10;" spacing="5">
-        <Text text="ข้อมูลผู้ใช้ตัวอย่าง:" style="-fx-font-weight: bold;"/>
-        <Text text="Admin: username = admin, password = admin"/>
-        <Text text="User: username = user, password = user"/>
+        <Label text="example:" style="-fx-font-weight: bold;"/>
+        <Label text="Admin: username = admin, password = admin"/>
+        <Label text="User: username = user, password = user"/>
     </VBox>
 
 </VBox>
