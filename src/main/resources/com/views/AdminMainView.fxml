@@ -38,10 +38,10 @@
 
             <!-- แถบเมนูเรียกด่วน -->
             <HBox style="-fx-background-color: #303F9F; -fx-padding: 5 15;" spacing="20">
-                <Button text="หน้าแรก" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
-                <Button text="+ เพิ่มหนังสือ" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
-                <Button text="+ เพิ่มสมาชิก" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
-                <Button text="ยืมหนังสือ" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="หน้าแรก" onAction="#showDashboard" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="+ เพิ่มหนังสือ" onAction="#showBookManagement" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="+ เพิ่มสมาชิก" onAction="#showMemberManagement" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="ยืมหนังสือ" onAction="#showBorrowReturn" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
                 <Button text="รายงาน" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
             </HBox>
         </VBox>

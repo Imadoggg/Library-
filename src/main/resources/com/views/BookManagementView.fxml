@@ -1,109 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<VBox xmlns="http://javafx.com/javafx/23.0.2"
-      xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.library.controllers.BookManagementController"
-      spacing="20"
-      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+      spacing="10"
+      style="-fx-padding: 10;">
 
-    <!-- ส่วนหัว -->
-    <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="จัดการหนังสือ" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="+ เพิ่มหนังสือใหม่" onAction="#handleAddBook"
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+    <Label text="จัดการหนังสือ" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="categoryComboBox" promptText="เลือกหมวดหมู่"/>
+        <TextField fx:id="searchField" promptText="ค้นหาหนังสือ"/>
+        <Button text="ค้นหา" onAction="#handleSearchBook"/>
+        <Button text="เพิ่มหนังสือ" onAction="#handleAddBook"/>
     </HBox>
 
-    <!-- ส่วนค้นหาและกรอง -->
-    <HBox spacing="10" alignment="CENTER_LEFT"
-          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);">
+    <TableView fx:id="bookTableView">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID"/>
+            <TableColumn fx:id="titleColumn" text="ชื่อหนังสือ"/>
+            <TableColumn fx:id="authorColumn" text="ผู้แต่ง"/>
+            <TableColumn fx:id="categoryColumn" text="หมวดหมู่"/>
+            <TableColumn fx:id="statusColumn" text="สถานะ"/>
+        </columns>
+    </TableView>
 
-        <Label text="กรองตาม:" style="-fx-font-weight: bold;"/>
-
-        <ComboBox fx:id="categoryComboBox"
-                  promptText="ทุกหมวดหมู่"
-                  prefWidth="150"/>
-
-        <ComboBox promptText="ทุกสถานะ" prefWidth="150">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="ทุกสถานะ"/>
-                    <String fx:value="พร้อมให้ยืม"/>
-                    <String fx:value="ถูกยืมแล้ว"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
-
-        <Region HBox.hgrow="ALWAYS"/>
-
-        <TextField fx:id="searchField"
-                   promptText="🔍 ค้นหาตามชื่อ, ผู้แต่ง, รหัส..."
-                   prefWidth="300"
-                   style="-fx-background-radius: 20; -fx-padding: 8;"/>
-
-        <Button text="ค้นหา"
-                onAction="#handleSearchBook"
-                style="-fx-background-color: #3F51B5; -fx-text-fill: white; -fx-background-radius: 5;"/>
-    </HBox>
-
-    <!-- ส่วนแสดงผล -->
-    <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- ตาราง -->
-        <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);">
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="รายการหนังสือทั้งหมด" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
-                <Label fx:id="totalResultsLabel" text="(จำนวน 0 รายการ)" style="-fx-text-fill: #757575;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button style="-fx-background-color: transparent; -fx-border-color: #E0E0E0; -fx-border-radius: 3;">
-                    <graphic>
-                        <Text text="⬇️" style="-fx-font-size: 14;"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="นำออก Excel"/>
-                    </tooltip>
-                </Button>
-
-                <Button style="-fx-background-color: transparent; -fx-border-color: #E0E0E0; -fx-border-radius: 3;">
-                    <graphic>
-                        <Text text="🖨️" style="-fx-font-size: 14;"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="พิมพ์รายการ"/>
-                    </tooltip>
-                </Button>
-            </HBox>
-
-            <TableView fx:id="bookTableView" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="idColumn" text="รหัส" prefWidth="100"/>
-                    <TableColumn fx:id="titleColumn" text="ชื่อหนังสือ" prefWidth="200"/>
-                    <TableColumn fx:id="authorColumn" text="ผู้แต่ง" prefWidth="150"/>
-                    <TableColumn fx:id="categoryColumn" text="หมวดหมู่" prefWidth="120"/>
-                    <TableColumn fx:id="statusColumn" text="สถานะ" prefWidth="120"/>
-                    <TableColumn text="การจัดการ" prefWidth="150">
-                        <cellFactory>
-                            <fx:reference source="actionButtonFactory"/>
-                        </cellFactory>
-                    </TableColumn>
-                </columns>
-                <placeholder>
-                    <Label text="ไม่พบข้อมูลหนังสือ หรือลองเปลี่ยนการค้นหา"/>
-                </placeholder>
-            </TableView>
-
-            <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button text="◀" style="-fx-background-color: #E0E0E0; -fx-background-radius: 3;"/>
-                <Label text="หน้า 1 จาก 1" style="-fx-text-fill: #757575;"/>
-                <Button text="▶" style="-fx-background-color: #E0E0E0; -fx-background-radius: 3;"/>
-            </HBox>
-        </VBox>
-    </HBox>
 </VBox>

@@ -9,6 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+
 public class AdminMainController {
     @FXML private Label usernameLabel;
     @FXML private StackPane contentArea;
@@ -17,11 +20,15 @@ public class AdminMainController {
 
     @FXML
     public void initialize() {
+        System.out.println("AdminMainController initializing...");
         dataManager = LibraryDataManager.getInstance();
 
         // ตั้งค่าชื่อผู้ใช้
         if (dataManager.getCurrentUser() != null) {
             usernameLabel.setText(dataManager.getCurrentUser().getName());
+            System.out.println("Set username label to: " + dataManager.getCurrentUser().getName());
+        } else {
+            System.out.println("Current user is null");
         }
 
         // แสดง dashboard เมื่อเริ่มต้น
@@ -30,6 +37,7 @@ public class AdminMainController {
 
     @FXML
     private void handleLogout() {
+        System.out.println("Logging out...");
         dataManager.logout();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/LoginView.fxml"));
@@ -45,33 +53,84 @@ public class AdminMainController {
     }
 
     @FXML
-    private void showDashboard() {
+    public void showDashboard() {
+        System.out.println("Showing dashboard...");
         loadContent("/com/views/AdminDashboardView.fxml");
     }
 
     @FXML
-    private void showBookManagement() {
-        loadContent("/com/views/BookManagementView.fxml");
+    public void showBookManagement() {
+        System.out.println("Showing book management...");
+        loadContent("com/views/BookManagementView.fxml");
     }
 
     @FXML
-    private void showMemberManagement() {
+    public void showMemberManagement() {
+        System.out.println("Showing member management...");
         loadContent("/com/views/MemberManagementView.fxml");
     }
 
     @FXML
-    private void showBorrowReturn() {
+    public void showBorrowReturn() {
+        System.out.println("Showing borrow-return...");
         loadContent("/com/views/BorrowReturnView.fxml");
     }
 
     private void loadContent(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            System.out.println("Trying to load: " + fxmlPath);
+
+            // ลองหาไฟล์ด้วยหลายวิธี
+            URL resource = null;
+
+            // วิธีที่ 1: ใช้ getResource ปกติ
+            resource = getClass().getResource(fxmlPath);
+            if (resource != null) {
+                System.out.println("Found resource using getClass().getResource()");
+            } else {
+                // วิธีที่ 2: ลองใช้ ClassLoader
+                String relativePath = fxmlPath.startsWith("/") ? fxmlPath.substring(1) : fxmlPath;
+                resource = getClass().getClassLoader().getResource(relativePath);
+                if (resource != null) {
+                    System.out.println("Found resource using ClassLoader: " + relativePath);
+                } else {
+                    // วิธีที่ 3: ลองเส้นทางอื่น
+                    String altPath = "/views" + fxmlPath.substring(fxmlPath.lastIndexOf('/'));
+                    resource = getClass().getResource(altPath);
+                    if (resource != null) {
+                        System.out.println("Found resource using alternative path: " + altPath);
+                    }
+                }
+            }
+
+            if (resource == null) {
+                throw new IOException("ไม่พบไฟล์ FXML: " + fxmlPath);
+            }
+
+            FXMLLoader loader = new FXMLLoader(resource);
             Parent view = loader.load();
+
+            if (contentArea == null) {
+                System.err.println("contentArea is null!");
+                return;
+            }
+
             contentArea.getChildren().clear();
             contentArea.getChildren().add(view);
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("ไม่สามารถโหลด " + fxmlPath + ": " + e.getMessage());
+
+            // แสดงข้อความแจ้งเตือนบนหน้าจอ
+            Label errorLabel = new Label("ไม่พบไฟล์ FXML: " + fxmlPath);
+            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+
+            if (contentArea != null) {
+                contentArea.getChildren().clear();
+                contentArea.getChildren().add(errorLabel);
+            } else {
+                System.err.println("contentArea is null, cannot display error message");
+            }
         }
     }
 }

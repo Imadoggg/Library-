@@ -85,11 +85,7 @@
                     <TableColumn fx:id="contactColumn" text="เบอร์โทรศัพท์" prefWidth="150"/>
                     <TableColumn text="สถานะ" prefWidth="120"/>
                     <TableColumn text="จำนวนที่ยืม" prefWidth="120"/>
-                    <TableColumn text="การจัดการ" prefWidth="150">
-                        <cellFactory>
-                            <fx:reference source="actionButtonFactory"/>
-                        </cellFactory>
-                    </TableColumn>
+                    <TableColumn text="การจัดการ" prefWidth="150"/>
                 </columns>
                 <placeholder>
                     <Label text="ไม่พบข้อมูลสมาชิก หรือลองเปลี่ยนการค้นหา"/>
