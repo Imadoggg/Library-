@@ -15,22 +15,23 @@
       spacing="10"
       style="-fx-padding: 10;">
 
-    <Label text="จัดการหนังสือ" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <Label text="Book Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
 
     <HBox spacing="10">
-        <ComboBox fx:id="categoryComboBox" promptText="เลือกหมวดหมู่"/>
-        <TextField fx:id="searchField" promptText="ค้นหาหนังสือ"/>
-        <Button text="ค้นหา" onAction="#handleSearchBook"/>
-        <Button text="เพิ่มหนังสือ" onAction="#handleAddBook"/>
+        <ComboBox fx:id="categoryComboBox" promptText="Select Category"/>
+        <TextField fx:id="searchField" promptText="Search Books"
+                   onAction="#handleSearchBook"/>
+        <Button text="Search" onAction="#handleSearchBook"/>
+        <Button text="Add Book" onAction="#handleAddBook"/>
     </HBox>
 
     <TableView fx:id="bookTableView">
         <columns>
             <TableColumn fx:id="idColumn" text="ID"/>
-            <TableColumn fx:id="titleColumn" text="ชื่อหนังสือ"/>
-            <TableColumn fx:id="authorColumn" text="ผู้แต่ง"/>
-            <TableColumn fx:id="categoryColumn" text="หมวดหมู่"/>
-            <TableColumn fx:id="statusColumn" text="สถานะ"/>
+            <TableColumn fx:id="titleColumn" text="Title"/>
+            <TableColumn fx:id="authorColumn" text="Author"/>
+            <TableColumn fx:id="categoryColumn" text="Category"/>
+            <TableColumn fx:id="statusColumn" text="Status"/>
         </columns>
     </TableView>
 

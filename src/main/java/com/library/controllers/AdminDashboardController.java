@@ -5,12 +5,9 @@ import com.library.models.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AdminDashboardController {
     @FXML private Label totalBooksLabel;
@@ -19,7 +16,6 @@ public class AdminDashboardController {
     @FXML private Label currentBorrowsLabel;
     @FXML private Label overdueBorrowsLabel;
     @FXML private Label totalBorrowsLabel;
-    @FXML private PieChart bookCategoryChart;
     @FXML private ListView<Book> popularBooksListView;
 
     private LibraryDataManager dataManager;
@@ -28,7 +24,7 @@ public class AdminDashboardController {
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
 
-        // ข้อมูลสรุป
+        // Summary data
         int totalBooks = dataManager.getAllBooks().size();
         int availableBooks = (int) dataManager.getAllBooks().stream()
                 .filter(Book::isAvailable)
@@ -38,49 +34,20 @@ public class AdminDashboardController {
         int totalBorrows = dataManager.getAllBorrowRecords().size();
 
         totalBooksLabel.setText(String.valueOf(totalBooks));
-        availableBooksLabel.setText(availableBooks + " เล่มพร้อมให้ยืม");
+        availableBooksLabel.setText(availableBooks + " available");
         totalMembersLabel.setText(String.valueOf(totalMembers));
         currentBorrowsLabel.setText(String.valueOf(currentBorrows));
-        overdueBorrowsLabel.setText("เกินกำหนด 0 รายการ");
-        totalBorrowsLabel.setText(String.valueOf(totalBorrows));
+        overdueBorrowsLabel.setText("0 overdue items");
+        if (totalBorrowsLabel != null) {
+            totalBorrowsLabel.setText(String.valueOf(totalBorrows));
+        }
 
-        // กราฟวงกลมหมวดหมู่หนังสือ
-        updateCategoryChart();
-
-        // รายการหนังสือยอดนิยม
+        // Popular books list
         updatePopularBooks();
     }
 
-    private void updateCategoryChart() {
-        Map<String, Long> categoryCounts = dataManager.getAllBooks().stream()
-                .collect(Collectors.groupingBy(Book::getCategory, Collectors.counting()));
-
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
-        categoryCounts.forEach((category, count) ->
-                pieChartData.add(new PieChart.Data(category + " (" + count + ")", count)));
-
-        bookCategoryChart.setData(pieChartData);
-
-        // เพิ่มสีสันให้กับกราฟ
-        int i = 0;
-        for (PieChart.Data data : pieChartData) {
-            String color = switch (i % 5) {
-                case 0 -> "#2196F3"; // น้ำเงิน
-                case 1 -> "#4CAF50"; // เขียว
-                case 2 -> "#FFC107"; // เหลือง
-                case 3 -> "#9C27B0"; // ม่วง
-                case 4 -> "#FF5722"; // ส้ม
-                default -> "#2196F3";
-            };
-
-            data.getNode().setStyle("-fx-pie-color: " + color + ";");
-            i++;
-        }
-    }
-
     private void updatePopularBooks() {
-        // ในระบบจริงอาจมีการนับจำนวนการยืม แต่ตอนนี้แสดงหนังสือทั้งหมด
+        // In a real system, would count number of borrows, but for now show all books
         ObservableList<Book> books = FXCollections.observableArrayList(dataManager.getAllBooks());
         popularBooksListView.setItems(books);
 

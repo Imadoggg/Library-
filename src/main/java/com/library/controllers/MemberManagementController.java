@@ -11,7 +11,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import java.util.Optional;
-import java.time.LocalDate;
 
 public class MemberManagementController {
     @FXML private TableView<Member> memberTableView;
@@ -25,30 +24,41 @@ public class MemberManagementController {
 
     @FXML
     public void initialize() {
+        System.out.println("MemberManagementController.initialize() started");
         dataManager = LibraryDataManager.getInstance();
         memberList = FXCollections.observableArrayList();
 
         // Setup columns
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        if (idColumn != null) {
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        }
+
+        if (nameColumn != null) {
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        }
+
+        if (contactColumn != null) {
+            contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        }
 
         // Add context menu for viewing borrow history
-        memberTableView.setRowFactory(tv -> {
-            TableRow<Member> row = new TableRow<>();
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem viewHistoryItem = new MenuItem("ดูประวัติการยืม");
-            viewHistoryItem.setOnAction(event -> showBorrowHistory(row.getItem()));
-            contextMenu.getItems().add(viewHistoryItem);
+        if (memberTableView != null) {
+            memberTableView.setRowFactory(tv -> {
+                TableRow<Member> row = new TableRow<>();
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem viewHistoryItem = new MenuItem("View Borrow History");
+                viewHistoryItem.setOnAction(event -> showBorrowHistory(row.getItem()));
+                contextMenu.getItems().add(viewHistoryItem);
 
-            // Set context menu only if row is not empty
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(row.emptyProperty())
-                            .then((ContextMenu) null)
-                            .otherwise(contextMenu)
-            );
-            return row;
-        });
+                // Set context menu only if row is not empty
+                row.contextMenuProperty().bind(
+                        javafx.beans.binding.Bindings.when(row.emptyProperty())
+                                .then((ContextMenu) null)
+                                .otherwise(contextMenu)
+                );
+                return row;
+            });
+        }
 
         refreshMemberList();
     }
@@ -56,11 +66,11 @@ public class MemberManagementController {
     @FXML
     private void handleAddMember() {
         Dialog<Member> dialog = new Dialog<>();
-        dialog.setTitle("เพิ่มสมาชิกใหม่");
-        dialog.setHeaderText("กรุณากรอกข้อมูลสมาชิก");
+        dialog.setTitle("Add New Member");
+        dialog.setHeaderText("Please enter member information");
 
         // Set the button types
-        ButtonType addButtonType = new ButtonType("เพิ่ม", ButtonBar.ButtonData.OK_DONE);
+        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
 
         // Create the form fields
@@ -69,13 +79,13 @@ public class MemberManagementController {
         grid.setVgap(10);
 
         TextField nameField = new TextField();
-        nameField.setPromptText("ชื่อ-นามสกุล");
+        nameField.setPromptText("Full Name");
         TextField contactField = new TextField();
-        contactField.setPromptText("เบอร์โทรศัพท์");
+        contactField.setPromptText("Phone Number");
 
-        grid.add(new Label("ชื่อ-นามสกุล:"), 0, 0);
+        grid.add(new Label("Full Name:"), 0, 0);
         grid.add(nameField, 1, 0);
-        grid.add(new Label("เบอร์โทรศัพท์:"), 0, 1);
+        grid.add(new Label("Phone Number:"), 0, 1);
         grid.add(contactField, 1, 1);
 
         dialog.getDialogPane().setContent(grid);
@@ -110,20 +120,24 @@ public class MemberManagementController {
                                     member.getId().toLowerCase().contains(searchText))
                     .toList());
         }
+
+        if (memberTableView != null) {
+            memberTableView.setItems(memberList);
+        }
     }
 
     private void showBorrowHistory(Member member) {
         Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("ประวัติการยืม");
-        dialog.setHeaderText("ประวัติการยืมของ " + member.getName());
+        dialog.setTitle("Borrow History");
+        dialog.setHeaderText("Borrow History for " + member.getName());
 
         VBox content = new VBox(10);
         ListView<String> historyList = new ListView<>();
 
         for (BorrowRecord record : member.getBorrowHistory()) {
-            String status = record.isReturned() ? "คืนแล้ว" : "ยังไม่คืน";
+            String status = record.isReturned() ? "Returned" : "Not Returned";
             historyList.getItems().add(String.format(
-                    "หนังสือ: %s | วันที่ยืม: %s | สถานะ: %s",
+                    "Book: %s | Borrow Date: %s | Status: %s",
                     record.getBook().getTitle(),
                     record.getBorrowDate().toLocalDate(),
                     status
@@ -140,6 +154,9 @@ public class MemberManagementController {
     private void refreshMemberList() {
         memberList.clear();
         memberList.addAll(dataManager.getAllMembers());
-        memberTableView.setItems(memberList);
+
+        if (memberTableView != null) {
+            memberTableView.setItems(memberList);
+        }
     }
 }

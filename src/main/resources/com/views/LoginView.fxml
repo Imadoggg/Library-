@@ -12,8 +12,8 @@
       style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
 
     <VBox alignment="CENTER" spacing="10">
-        <Label fx:id="titleLabel" text="Library" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-        <Label fx:id="subtitleLabel" text="กรุณาเข้าสู่ระบบ" style="-fx-font-size: 14;"/>
+        <Label fx:id="titleLabel" text="Library Management System" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label fx:id="subtitleLabel" text="Please log in" style="-fx-font-size: 14;"/>
     </VBox>
 
     <VBox fx:id="loginFormContainer"
@@ -29,7 +29,8 @@
 
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Password" style="-fx-font-weight: bold; -fx-min-width: 100;"/>
-            <PasswordField fx:id="passwordField" promptText="Password" HBox.hgrow="ALWAYS"/>
+            <PasswordField fx:id="passwordField" promptText="Password"
+                           onAction="#handleLogin" HBox.hgrow="ALWAYS"/>
         </HBox>
 
         <Label fx:id="errorLabel" textFill="RED" visible="false"/>
@@ -41,11 +42,11 @@
                 maxWidth="Infinity"/>
     </VBox>
 
-    <!-- ข้อมูลผู้ใช้ตัวอย่าง -->
+    <!-- Sample users info -->
     <VBox style="-fx-padding: 10;" spacing="5">
-        <Label text="example:" style="-fx-font-weight: bold;"/>
-        <Label text="Admin: admin, password = admin"/>
-        <Label text="User:  user, password = user"/>
+        <Label text="Sample users:" style="-fx-font-weight: bold;"/>
+        <Label text="Admin: username = admin, password = admin"/>
+        <Label text="User: username = user, password = user"/>
     </VBox>
 
 </VBox>

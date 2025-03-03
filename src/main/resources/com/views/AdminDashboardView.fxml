@@ -2,12 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.chart.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.shape.Rectangle?>
 
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <ScrollPane xmlns="http://javafx.com/javafx/23.0.2"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.library.controllers.AdminDashboardController"
@@ -15,133 +11,72 @@
             style="-fx-background-color: #f5f5f5;">
 
     <VBox spacing="20" style="-fx-padding: 20;">
-        <!-- หัวข้อและข้อมูลสรุป -->
+        <!-- Header and summary info -->
         <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label text="แดชบอร์ดผู้ดูแลระบบ" style="-fx-font-size: 26; -fx-font-weight: bold;"/>
-            <Label text="ข้อมูลสรุป ณ วันที่ปัจจุบัน" style="-fx-text-fill: #757575;"/>
+            <Label text="Admin Dashboard" style="-fx-font-size: 26; -fx-font-weight: bold;"/>
+            <Label text="Current summary" style="-fx-text-fill: #757575;"/>
         </HBox>
 
-        <!-- การ์ดข้อมูลสรุป -->
+        <!-- Summary cards -->
         <HBox spacing="20">
-            <!-- การ์ดจำนวนหนังสือ -->
+            <!-- Books summary card -->
             <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
                   HBox.hgrow="ALWAYS" maxWidth="Infinity" prefWidth="200">
-                <Label text="จำนวนหนังสือ" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
+                <Label text="Total Books" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label fx:id="totalBooksLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
-                    <Label text="เล่ม" style="-fx-font-size: 18;"/>
+                    <Label text="items" style="-fx-font-size: 18;"/>
                 </HBox>
                 <Label fx:id="availableBooksLabel" style="-fx-text-fill: #4CAF50; -fx-font-size: 14;"/>
-
-                <HBox alignment="CENTER_LEFT" spacing="5" style="-fx-padding: 10 0 0 0;">
-                    <Rectangle width="10" height="10" fill="#4CAF50" />
-                    <Label text="พร้อมให้ยืม" style="-fx-font-size: 12;"/>
-                    <Region HBox.hgrow="ALWAYS" />
-                    <Rectangle width="10" height="10" fill="#F44336" />
-                    <Label text="ถูกยืมแล้ว" style="-fx-font-size: 12;"/>
-                </HBox>
             </VBox>
 
-            <!-- การ์ดจำนวนสมาชิก -->
+            <!-- Members summary card -->
             <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
                   HBox.hgrow="ALWAYS" maxWidth="Infinity" prefWidth="200">
-                <Label text="จำนวนสมาชิก" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
+                <Label text="Total Members" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label fx:id="totalMembersLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #9C27B0;"/>
-                    <Label text="คน" style="-fx-font-size: 18;"/>
+                    <Label text="members" style="-fx-font-size: 18;"/>
                 </HBox>
-                <Label text="สมาชิกทั้งหมดในระบบ" style="-fx-text-fill: #757575; -fx-font-size: 14;"/>
-
-                <ProgressBar progress="0.75" prefWidth="Infinity" style="-fx-padding: 10 0 0 0;"/>
-                <Label text="75% ของเป้าหมายสมาชิก 100 คน" style="-fx-font-size: 12; -fx-text-fill: #757575;"/>
+                <Label text="All members" style="-fx-text-fill: #757575; -fx-font-size: 14;"/>
             </VBox>
 
-            <!-- การ์ดการยืม -->
+            <!-- Borrowing summary card -->
             <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
                   HBox.hgrow="ALWAYS" maxWidth="Infinity" prefWidth="200">
-                <Label text="การยืมหนังสือ" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
+                <Label text="Borrowing" style="-fx-font-size: 16; -fx-text-fill: #757575;"/>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label fx:id="currentBorrowsLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #FF9800;"/>
-                    <Label text="รายการ" style="-fx-font-size: 18;"/>
+                    <Label text="items" style="-fx-font-size: 18;"/>
                 </HBox>
                 <Label fx:id="overdueBorrowsLabel" style="-fx-text-fill: #F44336; -fx-font-size: 14;"/>
-
-                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 0 0 0;">
-                    <VBox>
-                        <Label text="วันนี้" style="-fx-font-size: 12; -fx-text-fill: #757575;"/>
-                        <Label text="0 รายการ" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
-                    </VBox>
-                    <VBox>
-                        <Label text="สัปดาห์นี้" style="-fx-font-size: 12; -fx-text-fill: #757575;"/>
-                        <Label text="2 รายการ" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
-                    </VBox>
-                    <VBox>
-                        <Label text="เดือนนี้" style="-fx-font-size: 12; -fx-text-fill: #757575;"/>
-                        <Label fx:id="totalBorrowsLabel" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
-                    </VBox>
-                </HBox>
             </VBox>
         </HBox>
 
-        <!-- สถิติและกราฟ -->
-        <HBox spacing="20">
-            <!-- กราฟวงกลมหมวดหมู่หนังสือ -->
-            <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
-                  prefWidth="500" HBox.hgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="หมวดหมู่หนังสือ" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <ComboBox promptText="ปีนี้" prefWidth="120">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="ปีนี้"/>
-                                <String fx:value="เดือนนี้"/>
-                                <String fx:value="ทั้งหมด"/>
-                            </FXCollections>
-                        </items>
-                    </ComboBox>
-                </HBox>
-                <PieChart fx:id="bookCategoryChart" legendVisible="true" prefHeight="300"/>
-            </VBox>
-
-            <!-- หนังสือยอดนิยม และหนังสือที่ต้องคืน -->
-            <VBox spacing="20" HBox.hgrow="ALWAYS" prefWidth="350">
-                <!-- หนังสือยอดนิยม -->
-                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="หนังสือยอดนิยม" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
-                        <Rectangle width="10" height="10" fill="#FF5722"/>
-                    </HBox>
-                    <ListView fx:id="popularBooksListView" prefHeight="150"/>
-                </VBox>
-
-                <!-- หนังสือที่ต้องคืนวันนี้ -->
-                <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="หนังสือที่ต้องคืนเร็วๆ นี้" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
-                        <Rectangle width="10" height="10" fill="#F44336"/>
-                    </HBox>
-                    <ListView fx:id="dueTodayBooksListView" prefHeight="150"/>
-                </VBox>
-            </VBox>
-        </HBox>
-
-        <!-- รายการล่าสุด -->
+        <!-- Recent activities -->
         <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="กิจกรรมล่าสุด" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+                <Label text="Recent Activities" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="ดูทั้งหมด" style="-fx-background-color: transparent; -fx-text-fill: #2196F3; -fx-border-color: #2196F3; -fx-border-radius: 5;"/>
+                <Button text="View All" style="-fx-background-color: transparent; -fx-text-fill: #2196F3; -fx-border-color: #2196F3; -fx-border-radius: 5;"/>
             </HBox>
 
             <TableView fx:id="recentActivitiesTable" prefHeight="200">
                 <columns>
-                    <TableColumn text="วันที่เวลา" prefWidth="150"/>
-                    <TableColumn text="กิจกรรม" prefWidth="150"/>
-                    <TableColumn text="รายละเอียด" prefWidth="300"/>
-                    <TableColumn text="โดย" prefWidth="150"/>
+                    <TableColumn text="Date/Time" prefWidth="150"/>
+                    <TableColumn text="Activity" prefWidth="150"/>
+                    <TableColumn text="Details" prefWidth="300"/>
+                    <TableColumn text="By" prefWidth="150"/>
                 </columns>
             </TableView>
+        </VBox>
+
+        <!-- Popular books list -->
+        <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Popular Books" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+            </HBox>
+            <ListView fx:id="popularBooksListView" prefHeight="150"/>
         </VBox>
     </VBox>
 </ScrollPane>

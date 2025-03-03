@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class BookManagementController {
 
@@ -25,12 +27,12 @@ public class BookManagementController {
 
     @FXML
     public void initialize() {
-        System.out.println("BookManagementController.initialize() เริ่มทำงาน");
+        System.out.println("BookManagementController.initialize() started");
         dataManager = LibraryDataManager.getInstance();
         bookList = FXCollections.observableArrayList();
 
         try {
-            // ตั้งค่าคอลัมน์ต่างๆ (ถ้ามีการกำหนดไว้)
+            // Set up columns (if defined)
             if (idColumn != null) {
                 idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             }
@@ -58,49 +60,60 @@ public class BookManagementController {
                         if (empty || item == null) {
                             setText(null);
                         } else {
-                            setText(item ? "พร้อมให้ยืม" : "ถูกยืมแล้ว");
+                            setText(item ? "Available" : "Borrowed");
                         }
                     }
                 });
             }
 
-            // ตั้งค่า ComboBox ตัวเลือกหมวดหมู่ (ถ้ามีการกำหนดไว้)
+            // Setup category ComboBox (if defined)
             if (categoryComboBox != null) {
-                System.out.println("กำลังตั้งค่า categoryComboBox");
+                System.out.println("Setting up categoryComboBox");
                 categoryComboBox.getItems().addAll(
-                        "ทั้งหมด",
+                        "All",
                         "Programming",
                         "Database",
                         "Network",
                         "AI",
                         "Other"
                 );
-                categoryComboBox.setValue("ทั้งหมด");
+                categoryComboBox.setValue("All");
                 categoryComboBox.setOnAction(e -> handleSearchBook());
             } else {
-                System.out.println("ไม่พบ categoryComboBox ในไฟล์ FXML");
+                System.out.println("categoryComboBox not found in FXML");
             }
 
-            // โหลดข้อมูลเริ่มต้น
+            // Setup search field Enter key handler
+            if (searchField != null) {
+                searchField.setOnKeyPressed(this::handleSearchKeyPress);
+            }
+
+            // Load initial data
             refreshBookList();
 
         } catch (Exception e) {
-            System.err.println("เกิดข้อผิดพลาดใน initialize: " + e.getMessage());
+            System.err.println("Error in initialize: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private void handleSearchKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            handleSearchBook();
         }
     }
 
     @FXML
     public void handleSearchBook() {
-        System.out.println("กำลังค้นหาหนังสือ...");
+        System.out.println("Searching for books...");
         try {
-            String category = categoryComboBox != null ? categoryComboBox.getValue() : "ทั้งหมด";
+            String category = categoryComboBox != null ? categoryComboBox.getValue() : "All";
             String searchText = searchField != null ? searchField.getText().trim() : "";
 
-            System.out.println("หมวดหมู่: " + category + ", คำค้นหา: " + searchText);
+            System.out.println("Category: " + category + ", Search text: " + searchText);
 
             bookList.clear();
-            if (category.equals("ทั้งหมด")) {
+            if (category.equals("All")) {
                 if (searchText.isEmpty()) {
                     bookList.addAll(dataManager.getAllBooks());
                 } else {
@@ -115,41 +128,41 @@ public class BookManagementController {
             }
 
         } catch (Exception e) {
-            System.err.println("เกิดข้อผิดพลาดในการค้นหา: " + e.getMessage());
+            System.err.println("Error searching: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @FXML
     public void handleAddBook() {
-        System.out.println("กำลังเพิ่มหนังสือใหม่...");
+        System.out.println("Adding new book...");
         try {
             TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("เพิ่มหนังสือใหม่");
-            dialog.setHeaderText("กรุณากรอกข้อมูลหนังสือ");
-            dialog.setContentText("ชื่อหนังสือ:");
+            dialog.setTitle("Add New Book");
+            dialog.setHeaderText("Please enter book information");
+            dialog.setContentText("Book Title:");
 
             dialog.showAndWait().ifPresent(title -> {
                 if (!title.isEmpty()) {
                     String id = "B" + String.format("%03d", dataManager.getAllBooks().size() + 1);
                     String category = categoryComboBox != null ? categoryComboBox.getValue() : "Programming";
-                    if (category.equals("ทั้งหมด")) category = "Programming";
+                    if (category.equals("All")) category = "Programming";
 
-                    Book newBook = new Book(id, title, "ผู้แต่งใหม่", category);
+                    Book newBook = new Book(id, title, "New Author", category);
                     dataManager.addBook(newBook);
                     refreshBookList();
                 }
             });
 
         } catch (Exception e) {
-            System.err.println("เกิดข้อผิดพลาดในการเพิ่มหนังสือ: " + e.getMessage());
+            System.err.println("Error adding book: " + e.getMessage());
             e.printStackTrace();
 
-            // แสดง Alert กรณีเกิดข้อผิดพลาด
+            // Show alert in case of error
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ข้อผิดพลาด");
-            alert.setHeaderText("ไม่สามารถเพิ่มหนังสือได้");
-            alert.setContentText("เกิดข้อผิดพลาด: " + e.getMessage());
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not add book");
+            alert.setContentText("Error: " + e.getMessage());
             alert.showAndWait();
         }
     }
@@ -165,7 +178,7 @@ public class BookManagementController {
                 }
             }
         } catch (Exception e) {
-            System.err.println("เกิดข้อผิดพลาดในการโหลดรายการหนังสือ: " + e.getMessage());
+            System.err.println("Error loading book list: " + e.getMessage());
             e.printStackTrace();
         }
     }
