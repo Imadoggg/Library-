@@ -30,7 +30,6 @@ public class ChangePasswordController {
         // ตรวจสอบความถูกต้อง
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
             DialogUtils.showErrorDialog("ข้อผิดพลาด", "กรุณากรอกข้อมูลให้ครบทุกช่อง");
-            return;
         }
 
         // ตรวจสอบรหัสผ่านปัจจุบัน

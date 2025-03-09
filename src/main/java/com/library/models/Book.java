@@ -19,6 +19,7 @@ public class Book {
         setCategory(category);
     }
 
+
     // ID
     public String getId() { return id.get(); }
     public void setId(String value) { id.set(value); }

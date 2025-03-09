@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.BookAddController"
+      spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <VBox alignment="CENTER" spacing="10">
+        <Label text="Library" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label text="Add new Book" style="-fx-font-size: 14;"/>
+    </VBox>
+
+    <VBox fx:id="bookFormContainer"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
+          maxWidth="500"
+          spacing="10">
+
+        <!-- ชื่อหนังสือ -->
+        <Label text="Title" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="titleField" promptText="ชื่อหนังสือ"/>
+
+        <!-- ผู้แต่ง -->
+        <Label text="Author" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="authorField" promptText="ชื่อผู้แต่ง"/>
+
+        <!-- หมวดหมู่ -->
+        <Label text="Category" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10">
+            <ComboBox fx:id="categoryComboBox" promptText="เลือกหมวดหมู่" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button fx:id="addCategoryButton" text="+" onAction="#handleAddCategory"/>
+        </HBox>
+
+        <!-- สถานะ -->
+        <Label text="Status" style="-fx-font-weight: bold;"/>
+        <CheckBox fx:id="availableCheckBox" text="พร้อมให้ยืม" selected="true"/>
+
+        <!-- ข้อความแจ้งเตือน -->
+        <Label fx:id="errorLabel" textFill="RED" visible="false"/>
+
+        <!-- ปุ่มดำเนินการ -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="cancelButton"
+                    text="Cancle"
+                    onAction="#handleCancel"
+                    style="-fx-background-color: #e0e0e0;"
+                    prefWidth="100"/>
+
+            <Button fx:id="saveButton"
+                    text="Save"
+                    onAction="#handleSave"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"
+                    prefWidth="100"/>
+        </HBox>
+    </VBox>
+</VBox>

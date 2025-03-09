@@ -35,4 +35,9 @@
         </columns>
     </TableView>
 
+    <Button fx:id="addBookButton"
+            text="เพิ่มหนังสือใหม่"
+            onAction="#handleAddBook"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+
 </VBox>

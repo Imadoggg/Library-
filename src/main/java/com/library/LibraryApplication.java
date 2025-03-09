@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -128,6 +127,11 @@ public class LibraryApplication extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    @Override
+    public void stop() {
+        System.out.println("แอปพลิเคชันกำลังปิด...");
+        LibraryDataManager.getInstance().shutdown();
     }
 
     public static void main(String[] args) {

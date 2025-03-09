@@ -42,12 +42,12 @@
         <!-- มุมมองตาราง -->
         <TableView fx:id="bookTableView" visible="false">
             <columns>
-                <TableColumn fx:id="idColumn" text="รหัส" prefWidth="80"/>
-                <TableColumn fx:id="titleColumn" text="ชื่อหนังสือ" prefWidth="250"/>
-                <TableColumn fx:id="authorColumn" text="ผู้แต่ง" prefWidth="150"/>
-                <TableColumn fx:id="categoryColumn" text="หมวดหมู่" prefWidth="100"/>
-                <TableColumn fx:id="statusColumn" text="สถานะ" prefWidth="100"/>
-                <TableColumn fx:id="actionColumn" text="ดำเนินการ" prefWidth="120"/>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="80"/>
+                <TableColumn fx:id="titleColumn" text="Title" prefWidth="250"/>
+                <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+                <TableColumn fx:id="categoryColumn" text="Category" prefWidth="100"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="actionColumn" text="Process" prefWidth="120"/>
             </columns>
         </TableView>
     </StackPane>

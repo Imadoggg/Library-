@@ -11,7 +11,7 @@
       style="-fx-padding: 10;">
 
     <MenuBar>
-        <Menu text="ห้องสมุดโย้ๆ">
+        <Menu text="Library sistem">
             <MenuItem text="ออกจากโปรแกรม" onAction="#handleExit"/>
         </Menu>
     </MenuBar>

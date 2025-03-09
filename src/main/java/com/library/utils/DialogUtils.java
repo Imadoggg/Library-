@@ -22,12 +22,4 @@ public class DialogUtils {
         alert.showAndWait();
     }
 
-    // Show a warning dialog
-    public static void showWarningDialog(String title, String message) {
-        Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

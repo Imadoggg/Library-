@@ -57,18 +57,23 @@ public class LoginController {
 
         if (dataManager.login(username, password)) {
             try {
-                // Load appropriate view based on user role
-                String viewPath = dataManager.isCurrentUserAdmin()
+                // ตรวจสอบบทบาทของผู้ใช้ว่าเป็น admin หรือไม่
+                boolean isAdmin = dataManager.isCurrentUserAdmin();
+
+                // เลือกหน้าตามบทบาท
+                String viewPath = isAdmin
                         ? "/com/views/AdminMainView.fxml"
                         : "/com/views/UserMainView.fxml";
+
+                System.out.println("User role is admin: " + isAdmin + ", loading: " + viewPath);
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
                 Parent root = loader.load();
 
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 stage.setScene(new Scene(root, 800, 600));
-                stage.setTitle("Library Management System - " +
-                        (dataManager.isCurrentUserAdmin() ? "Administrator" : "User"));
+                stage.setTitle("Library System - " +
+                        (isAdmin ? "Administrator" : "User"));
                 stage.centerOnScreen();
 
             } catch (Exception e) {
