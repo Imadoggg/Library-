@@ -33,8 +33,6 @@
                     style="-fx-background-color: #64B5F6; -fx-text-fill: white;"/>
             <Button text="ประวัติการยืม" maxWidth="Infinity" onAction="#showBorrowHistory"
                     style="-fx-background-color: #64B5F6; -fx-text-fill: white;"/>
-            <Button text="โปรไฟล์" maxWidth="Infinity" onAction="#showProfile"
-                    style="-fx-background-color: #64B5F6; -fx-text-fill: white;"/>
         </VBox>
     </left>
 

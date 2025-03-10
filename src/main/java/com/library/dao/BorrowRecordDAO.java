@@ -24,6 +24,8 @@ public class BorrowRecordDAO {
      */
     public List<BorrowRecord> getAllBorrowRecords() {
         List<BorrowRecord> records = new ArrayList<>();
+        List<Object[]> rawData = new ArrayList<>(); // เก็บข้อมูลดิบ
+
         String query = "SELECT id, book_id, member_id, borrow_date, return_date, returned FROM borrow_records";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -31,14 +33,45 @@ public class BorrowRecordDAO {
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                BorrowRecord record = createBorrowRecordFromResultSet(rs);
-                if (record != null) {
-                    records.add(record);
-                }
+                Object[] row = new Object[6];
+                row[0] = rs.getString("id");
+                row[1] = rs.getInt("book_id");
+                row[2] = rs.getInt("member_id");
+                row[3] = rs.getTimestamp("borrow_date");
+                row[4] = rs.getTimestamp("return_date");
+                row[5] = rs.getBoolean("returned");
+                rawData.add(row);
             }
         } catch (SQLException e) {
             System.err.println("Error fetching borrow records: " + e.getMessage());
             e.printStackTrace();
+            return records;
+        }
+
+        // สร้าง objects จากข้อมูลดิบ
+        for (Object[] row : rawData) {
+            String id = (String) row[0];
+            int bookId = (int) row[1];
+            int memberId = (int) row[2];
+            Timestamp borrowTimestamp = (Timestamp) row[3];
+            Timestamp returnTimestamp = (Timestamp) row[4];
+            boolean returned = (boolean) row[5];
+
+            Book book = bookDAO.getBookById(String.valueOf(bookId));
+            Member member = memberDAO.getMemberById(String.valueOf(memberId));
+
+            if (book != null && member != null) {
+                BorrowRecord record = new BorrowRecord(book, member);
+                record.setId(id);
+                record.setBorrowDate(borrowTimestamp.toLocalDateTime());
+
+                if (returnTimestamp != null) {
+                    record.setReturnDate(returnTimestamp.toLocalDateTime());
+                }
+
+                record.setReturned(returned);
+                records.add(record);
+            }
         }
 
         return records;
@@ -244,6 +277,8 @@ public class BorrowRecordDAO {
      */
     public List<BorrowRecord> getActiveBorrowRecords() {
         List<BorrowRecord> records = new ArrayList<>();
+        List<Object[]> rawData = new ArrayList<>(); // เก็บข้อมูลดิบก่อนที่ ResultSet จะถูกปิด
+
         String query = "SELECT id, book_id, member_id, borrow_date, return_date, returned FROM borrow_records WHERE returned = false";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -259,10 +294,35 @@ public class BorrowRecordDAO {
         } catch (SQLException e) {
             System.err.println("Error fetching active borrow records: " + e.getMessage());
             e.printStackTrace();
+            return records;
+        }
+        for (Object[] row : rawData) {
+            String id = (String) row[0];
+            int bookId = (int) row[1];
+            int memberId = (int) row[2];
+            Timestamp borrowTimestamp = (Timestamp) row[3];
+            Timestamp returnTimestamp = (Timestamp) row[4];
+            boolean returned = (boolean) row[5];
+            Book book = bookDAO.getBookById(String.valueOf(bookId));
+            Member member = memberDAO.getMemberById(String.valueOf(memberId));
+
+            if (book != null && member != null) {
+                BorrowRecord record = new BorrowRecord(book, member);
+                record.setId(id);
+                record.setBorrowDate(borrowTimestamp.toLocalDateTime());
+
+                if (returnTimestamp != null) {
+                    record.setReturnDate(returnTimestamp.toLocalDateTime());
+                }
+
+                record.setReturned(returned);
+                records.add(record);
+            }
         }
 
         return records;
     }
+
 
     /**
      * ดึงบันทึกการยืม-คืนที่เกินกำหนดส่ง
@@ -296,15 +356,16 @@ public class BorrowRecordDAO {
      * สร้าง BorrowRecord จาก ResultSet
      */
     private BorrowRecord createBorrowRecordFromResultSet(ResultSet rs) throws SQLException {
+
         String id = rs.getString("id");
-        int bookId = rs.getInt("book_id"); // แก้เป็นรับค่า int
-        int memberId = rs.getInt("member_id"); // แก้เป็นรับค่า int
+        int bookId = rs.getInt("book_id");
+        int memberId = rs.getInt("member_id");
         Timestamp borrowTimestamp = rs.getTimestamp("borrow_date");
         Timestamp returnTimestamp = rs.getTimestamp("return_date");
         boolean returned = rs.getBoolean("returned");
 
-        Book book = bookDAO.getBookById(String.valueOf(bookId)); // แปลง int เป็น String
-        Member member = memberDAO.getMemberById(String.valueOf(memberId)); // แปลง int เป็น String ต้องแน่ใจว่า getMemberById รับพารามิเตอร์เป็น int
+        Book book = bookDAO.getBookById(String.valueOf(bookId));
+        Member member = memberDAO.getMemberById(String.valueOf(memberId));
 
         if (book != null && member != null) {
             LocalDateTime borrowDate = borrowTimestamp.toLocalDateTime();
@@ -318,7 +379,6 @@ public class BorrowRecordDAO {
             }
 
             record.setReturned(returned);
-
             return record;
         }
 

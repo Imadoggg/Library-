@@ -26,11 +26,9 @@
                     </graphic>
                 </Button>
 
-                <Label text="|" style="-fx-text-fill: white;"/>
-
                 <!-- Username -->
                 <Label text="Admin" style="-fx-text-fill: white;"/>
-                <Label fx:id="usernameLabel" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Label fx:id="usernameLabel" style="-fx-text-fill: white;"/>
 
                 <Button text="Logout" onAction="#handleLogout"
                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 3;"/>
@@ -42,7 +40,6 @@
                 <Button text="+ Add Book" onAction="#showBookManagement" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
                 <Button text="+ Add Member" onAction="#showMemberManagement" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
                 <Button text="Borrow Books" onAction="#showBorrowReturn" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
-                <Button text="Reports" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
@@ -78,32 +75,13 @@
 
             <Separator/>
 
-            <!-- Additional menu -->
-            <VBox spacing="2" style="-fx-padding: 10;">
-                <Label text="Reports" style="-fx-font-size: 12; -fx-text-fill: #757575; -fx-padding: 5 10;"/>
-
-                <Button text="📝 Borrowing Report" maxWidth="Infinity"
-                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
-
-                <Button text="📈 Usage Statistics" maxWidth="Infinity"
-                        style="-fx-background-color: transparent; -fx-text-fill: black; -fx-alignment: BASELINE_LEFT; -fx-padding: 10;"/>
-            </VBox>
-
             <Region VBox.vgrow="ALWAYS"/>
 
-            <!-- Bottom section -->
-            <HBox alignment="CENTER" style="-fx-padding: 10;">
-                <Button text="⚙️ Settings" style="-fx-background-color: transparent;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="❓ Help" style="-fx-background-color: transparent;"/>
-            </HBox>
         </VBox>
     </left>
 
-    <!-- Main content area -->
     <center>
         <StackPane fx:id="contentArea">
-            <!-- Dashboard will be loaded in initialize() method -->
         </StackPane>
     </center>
 </BorderPane>

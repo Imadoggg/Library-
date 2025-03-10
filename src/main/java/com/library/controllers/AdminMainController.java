@@ -16,6 +16,7 @@ public class AdminMainController {
     @FXML private Label usernameLabel;
     @FXML private StackPane contentArea;
 
+
     private LibraryDataManager dataManager;
 
     @FXML

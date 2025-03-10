@@ -14,7 +14,7 @@
         <!-- Header and summary info -->
         <HBox alignment="CENTER_LEFT" spacing="20">
             <Label text="Admin Dashboard" style="-fx-font-size: 26; -fx-font-weight: bold;"/>
-            <Label text="Current summary" style="-fx-text-fill: #757575;"/>
+            <Label text="Current Summary" style="-fx-text-fill: #757575;"/>
         </HBox>
 
         <!-- Summary cards -->
