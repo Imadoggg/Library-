@@ -174,7 +174,7 @@ public class LibraryDataManager {
 
             boolean success = borrowRecordDAO.addBorrowRecord(record);
             if (success) {
-                notifyBookListeners();
+                notifyBookListeners(); // แจ้งเตือนผู้ฟัง
                 return record;
             }
         }
@@ -188,34 +188,20 @@ public class LibraryDataManager {
     public boolean returnBook(String borrowId) {
         boolean result = borrowRecordDAO.returnBook(borrowId);
         if (result) {
-            notifyBookListeners();
+            notifyBookListeners(); // แจ้งเตือนผู้ฟัง
         }
         return result;
     }
-    /**
-     * อัปเดตข้อมูลผู้ใช้
-     * @param user ข้อมูลผู้ใช้ที่ต้องการอัปเดต
-     * @return true ถ้าอัปเดตสำเร็จ, false ถ้าไม่สำเร็จ
-     */
+
     public boolean updateUser(User user) {
         return userDAO.updateUser(user);
     }
 
-    /**
-     * ตรวจสอบข้อมูลเข้าสู่ระบบ
-     * @param username ชื่อผู้ใช้
-     * @param password รหัสผ่าน
-     * @return true ถ้าข้อมูลถูกต้อง, false ถ้าไม่ถูกต้อง
-     */
+
     public boolean validateCredentials(String username, String password) {
         return userDAO.validateCredentials(username, password);
     }
-    /**
-     * เปลี่ยนรหัสผ่านของผู้ใช้
-     * @param username ชื่อผู้ใช้
-     * @param newPassword รหัสผ่านใหม่
-     * @return true ถ้าเปลี่ยนสำเร็จ, false ถ้าไม่สำเร็จ
-     */
+
 
     public boolean changePassword(String username, String newPassword) {
         return userDAO.changePassword(username, newPassword);
