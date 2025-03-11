@@ -7,10 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AdminDashboardController {
 
@@ -19,12 +22,20 @@ public class AdminDashboardController {
     @FXML private Label totalMembersLabel;
     @FXML private Label currentBorrowsLabel;
     @FXML private Label overdueBorrowsLabel;
+
     @FXML private TableView<BorrowRecord> recentActivitiesTable;
+    @FXML private TableColumn<BorrowRecord, String> dateTimeColumn;
+    @FXML private TableColumn<BorrowRecord, String> activityColumn;
+    @FXML private TableColumn<BorrowRecord, String> detailsColumn;
+    @FXML private TableColumn<BorrowRecord, String> byColumn;
+
     @FXML private ListView<String> popularBooksListView;
 
     private LibraryDataManager dataManager;
     private ObservableList<BorrowRecord> activityList;
     private ObservableList<String> popularBooksList;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @FXML
     private void initialize() {
@@ -32,117 +43,160 @@ public class AdminDashboardController {
         activityList = FXCollections.observableArrayList();
         popularBooksList = FXCollections.observableArrayList();
 
-        // ลงทะเบียน listeners เพื่อรับทราบการเปลี่ยนแปลงข้อมูล
+        // ตั้งค่าการแสดงผลคอลัมน์
+        setupTableColumns();
+
+        // ลงทะเบียน listeners เพื่อรับการแจ้งเตือนการเปลี่ยนแปลงข้อมูล
         dataManager.addBookUpdateListener(this::refreshDashboard);
         dataManager.addMemberUpdateListener(this::refreshDashboard);
 
-        // โหลดข้อมูลครั้งแรก
+        // เรียกโหลดข้อมูลครั้งแรก
         refreshDashboard();
     }
 
-    /**
-     * รีเฟรชข้อมูลทั้งหมดบนแดชบอร์ด
-     */
-    private void refreshDashboard() {
-        updateBookStats();
-        updateMemberStats();
-        updateBorrowStats();
-        updateRecentActivities();
-        updatePopularBooks();
-    }
-
-    /**
-     * อัปเดตสถิติของหนังสือ
-     */
-    private void updateBookStats() {
-        List<Book> allBooks = dataManager.getAllBooks();
-        int totalBooks = allBooks.size();
-        int availableBooks = 0;
-
-        for (Book book : allBooks) {
-            if (book.isAvailable()) {
-                availableBooks++;
+    private void setupTableColumns() {
+        try {
+            // ตรวจสอบว่าคอลัมน์ไม่เป็น null ก่อนกำหนดค่า
+            if (dateTimeColumn != null) {
+                dateTimeColumn.setCellValueFactory(cellData ->
+                        new SimpleStringProperty(cellData.getValue().getBorrowDate().format(formatter)));
             }
-        }
 
-        totalBooksLabel.setText(String.valueOf(totalBooks));
-        availableBooksLabel.setText(availableBooks + " available (" +
-                (totalBooks > 0 ? (availableBooks * 100 / totalBooks) : 0) + "%)");
+            if (activityColumn != null) {
+                activityColumn.setCellValueFactory(cellData ->
+                        new SimpleStringProperty(cellData.getValue().isReturned() ? "Return" : "Borrow"));
+            }
+
+            if (detailsColumn != null) {
+                detailsColumn.setCellValueFactory(cellData ->
+                        new SimpleStringProperty(cellData.getValue().getBook().getTitle() +
+                                " by " + cellData.getValue().getMember().getName()));
+            }
+
+            if (byColumn != null) {
+                byColumn.setCellValueFactory(cellData ->
+                        new SimpleStringProperty("Librarian"));
+            }
+        } catch (Exception e) {
+            System.err.println("Error setting up table columns: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * อัปเดตสถิติของสมาชิก
-     */
+    private void refreshDashboard() {
+        try {
+            updateBookStats();
+            updateMemberStats();
+            updateBorrowStats();
+            updateRecentActivities();
+            updatePopularBooks();
+        } catch (Exception e) {
+            System.err.println("Error refreshing dashboard: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updateBookStats() {
+        try {
+            List<Book> allBooks = dataManager.getAllBooks();
+            int totalBooks = allBooks.size();
+            int availableBooks = 0;
+
+            for (Book book : allBooks) {
+                if (book.isAvailable()) {
+                    availableBooks++;
+                }
+            }
+
+            totalBooksLabel.setText(String.valueOf(totalBooks));
+            availableBooksLabel.setText(availableBooks + " available");
+        } catch (Exception e) {
+            System.err.println("Error updating book stats: " + e.getMessage());
+        }
+    }
+
     private void updateMemberStats() {
-        int totalMembers = dataManager.getAllMembers().size();
-        totalMembersLabel.setText(String.valueOf(totalMembers));
+        try {
+            int totalMembers = dataManager.getAllMembers().size();
+            totalMembersLabel.setText(String.valueOf(totalMembers));
+        } catch (Exception e) {
+            System.err.println("Error updating member stats: " + e.getMessage());
+        }
     }
 
-    /**
-     * อัปเดตสถิติการยืม-คืน
-     */
     private void updateBorrowStats() {
-        List<BorrowRecord> activeRecords = dataManager.getActiveBorrowRecords();
-        List<BorrowRecord> overdueRecords = dataManager.getOverdueBorrowRecords();
+        try {
+            List<BorrowRecord> activeRecords = dataManager.getActiveBorrowRecords();
+            List<BorrowRecord> overdueRecords = dataManager.getOverdueBorrowRecords();
 
-        currentBorrowsLabel.setText(String.valueOf(activeRecords.size()));
-        overdueBorrowsLabel.setText(overdueRecords.size() + " overdue");
+            currentBorrowsLabel.setText(String.valueOf(activeRecords.size()));
+            overdueBorrowsLabel.setText(overdueRecords.size() + " overdue");
+        } catch (Exception e) {
+            System.err.println("Error updating borrow stats: " + e.getMessage());
+        }
     }
 
-    /**
-     * อัปเดตกิจกรรมล่าสุด
-     */
     private void updateRecentActivities() {
-        activityList.clear();
+        try {
+            activityList.clear();
 
-        // ในตัวอย่างนี้ เราใช้การยืมล่าสุดเป็นกิจกรรม
-        // คุณสามารถปรับเปลี่ยนให้เหมาะสมกับระบบของคุณ
-        List<BorrowRecord> allRecords = dataManager.getAllBorrowRecords();
+            List<BorrowRecord> allRecords = dataManager.getAllBorrowRecords();
+            if (allRecords == null || allRecords.isEmpty()) {
+                return;
+            }
 
-        // เรียงลำดับตามวันที่ล่าสุด
-        allRecords.sort((r1, r2) -> r2.getBorrowDate().compareTo(r1.getBorrowDate()));
+            // เรียงตามวันที่ล่าสุด
+            allRecords.sort((r1, r2) -> r2.getBorrowDate().compareTo(r1.getBorrowDate()));
 
-        // แสดงเฉพาะ 10 รายการล่าสุด
-        int count = 0;
-        for (BorrowRecord record : allRecords) {
-            activityList.add(record);
-            count++;
-            if (count >= 10) break;
+            // เพิ่มเฉพาะ 10 รายการล่าสุด
+            int count = 0;
+            for (BorrowRecord record : allRecords) {
+                if (record != null) {
+                    activityList.add(record);
+                    count++;
+                    if (count >= 10) break;
+                }
+            }
+
+            recentActivitiesTable.setItems(activityList);
+        } catch (Exception e) {
+            System.err.println("Error updating activities: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        recentActivitiesTable.setItems(activityList);
     }
 
-    /**
-     * อัปเดตหนังสือยอดนิยม
-     */
     private void updatePopularBooks() {
-        popularBooksList.clear();
+        try {
+            popularBooksList.clear();
 
-        // ตัวอย่างการนับจำนวนการยืมหนังสือแต่ละเล่ม
-        Map<String, Integer> bookBorrowCounts = new HashMap<>();
-        List<BorrowRecord> allRecords = dataManager.getAllBorrowRecords();
+            Map<String, Integer> bookCounts = new HashMap<>();
+            Map<String, String> bookTitles = new HashMap<>();
 
-        for (BorrowRecord record : allRecords) {
-            String bookId = record.getBook().getId();
-            String bookTitle = record.getBook().getTitle();
-            String key = bookId + " - " + bookTitle;
+            for (BorrowRecord record : dataManager.getAllBorrowRecords()) {
+                if (record != null && record.getBook() != null) {
+                    String bookId = record.getBook().getId();
+                    bookCounts.put(bookId, bookCounts.getOrDefault(bookId, 0) + 1);
+                    bookTitles.put(bookId, record.getBook().getTitle());
+                }
+            }
 
-            bookBorrowCounts.put(key, bookBorrowCounts.getOrDefault(key, 0) + 1);
+            // เรียงตามจำนวนการยืม
+            List<Map.Entry<String, Integer>> sortedBooks = new ArrayList<>(bookCounts.entrySet());
+            sortedBooks.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+            // เพิ่ม 5 อันดับแรก
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : sortedBooks) {
+                String bookTitle = bookTitles.get(entry.getKey());
+                popularBooksList.add(bookTitle + " (" + entry.getValue() + " borrows)");
+                count++;
+                if (count >= 5) break;
+            }
+
+            popularBooksListView.setItems(popularBooksList);
+        } catch (Exception e) {
+            System.err.println("Error updating popular books: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        // แปลงเป็น List และเรียงลำดับตามจำนวนการยืม
-        List<Map.Entry<String, Integer>> sortedBooks = new ArrayList<>(bookBorrowCounts.entrySet());
-        sortedBooks.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
-
-        // แสดงหนังสือยอดนิยม 5 อันดับ
-        int count = 0;
-        for (Map.Entry<String, Integer> entry : sortedBooks) {
-            popularBooksList.add(entry.getKey() + " (" + entry.getValue() + " borrows)");
-            count++;
-            if (count >= 5) break;
-        }
-
-        popularBooksListView.setItems(popularBooksList);
     }
 }

@@ -63,10 +63,10 @@
 
             <TableView fx:id="recentActivitiesTable" prefHeight="200">
                 <columns>
-                    <TableColumn text="Date/Time" prefWidth="150"/>
-                    <TableColumn text="Activity" prefWidth="150"/>
-                    <TableColumn text="Details" prefWidth="300"/>
-                    <TableColumn text="By" prefWidth="150"/>
+                    <TableColumn fx:id="dateTimeColumn" text="Date/Time" prefWidth="150"/>
+                    <TableColumn fx:id="activityColumn" text="Activity" prefWidth="150"/>
+                    <TableColumn fx:id="detailsColumn" text="Details" prefWidth="300"/>
+                    <TableColumn fx:id="byColumn" text="By" prefWidth="150"/>
                 </columns>
             </TableView>
         </VBox>

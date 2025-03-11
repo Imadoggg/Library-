@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class LoginController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -47,41 +49,46 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText().trim();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // ล้างข้อความผิดพลาด
+        errorLabel.setVisible(false);
 
         if (username.isEmpty() || password.isEmpty()) {
-            showError("Please enter username and password");
+            errorLabel.setText("Please enter username and password");
+            errorLabel.setVisible(true);
             return;
         }
 
         if (dataManager.login(username, password)) {
             try {
-                // ตรวจสอบบทบาทของผู้ใช้ว่าเป็น admin หรือไม่
-                boolean isAdmin = dataManager.isCurrentUserAdmin();
-
-                // เลือกหน้าตามบทบาท
-                String viewPath = isAdmin
-                        ? "/com/views/AdminMainView.fxml"
-                        : "/com/views/UserMainView.fxml";
-
-                System.out.println("User role is admin: " + isAdmin + ", loading: " + viewPath);
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
-                Parent root = loader.load();
-
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root, 800, 600));
-                stage.setTitle("Library System - " +
-                        (isAdmin ? "Administrator" : "User"));
-                stage.centerOnScreen();
-
-            } catch (Exception e) {
+                // ตรวจสอบว่าเป็น admin หรือ user
+                if (dataManager.isCurrentUserAdmin()) {
+                    // เปิดหน้า Admin Dashboard
+                    Parent root = FXMLLoader.load(getClass().getResource("/com/views/AdminMainView.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.setTitle("Admin Dashboard - Library Management System");
+                    stage.show();
+                } else {
+                    // เปิดหน้า User Main
+                    Parent root = FXMLLoader.load(getClass().getResource("/com/views/UserMainView.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.setTitle("User Dashboard - Library Management System");
+                    stage.show();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
-                showError("Error loading screen: " + e.getMessage());
+                errorLabel.setText("Error loading dashboard");
+                errorLabel.setVisible(true);
             }
         } else {
-            showError("Invalid username or password");
+            errorLabel.setText("Invalid username or password");
+            errorLabel.setVisible(true);
         }
     }
 

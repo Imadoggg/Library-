@@ -40,9 +40,7 @@ public class UserDAO {
         return users;
     }
 
-    /**
-     * ดึงผู้ใช้จากฐานข้อมูลตามชื่อผู้ใช้
-     */
+
     public User getUserByUsername(String username) {
         String query = "SELECT username, password, name, role, email FROM users WHERE username = ?";
 
@@ -70,33 +68,7 @@ public class UserDAO {
         return null;
     }
 
-    /**
-     * เพิ่มผู้ใช้ใหม่ในฐานข้อมูล
-     */
-    public boolean addUser(User user) {
-        String query = "INSERT INTO users (username, password, name, role, email) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getName());
-            pstmt.setString(4, user.getRole().name());
-            pstmt.setString(5, user.getEmail());
-
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            System.err.println("Error adding user: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * อัปเดตข้อมูลผู้ใช้ในฐานข้อมูล
-     */
     public boolean updateUser(User user) {
         String query = "UPDATE users SET password = ?, name = ?, role = ?, email = ? WHERE username = ?";
 
@@ -138,9 +110,7 @@ public class UserDAO {
         }
     }
 
-    /**
-     * ตรวจสอบความถูกต้องของข้อมูลเข้าสู่ระบบ
-     */
+
     public boolean validateCredentials(String username, String password) {
         String query = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
 
@@ -164,9 +134,7 @@ public class UserDAO {
         return false;
     }
 
-    /**
-     * เปลี่ยนรหัสผ่านของผู้ใช้
-     */
+
     public boolean changePassword(String username, String newPassword) {
         String query = "UPDATE users SET password = ? WHERE username = ?";
 

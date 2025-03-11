@@ -11,6 +11,12 @@ import com.library.models.User;
 import com.library.models.UserRole;
 import com.library.utils.DatabaseConnection;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,14 +114,40 @@ public class LibraryDataManager {
 
     // Borrow record related methods - เพิ่มเติมตามความเหมาะสม
 
-    // User related methods
     public boolean login(String username, String password) {
-        boolean isValid = userDAO.validateCredentials(username, password);
-        if (isValid) {
-            currentUser = userDAO.getUserByUsername(username);
-            return true;
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, hashPassword(password));
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // สำคัญ: ต้องดึงข้อมูลผู้ใช้และกำหนดค่า currentUser
+                this.currentUser = userDAO.getUserByUsername(username);
+                return true;
+            }
+            return false;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
+        }
     }
 
     public void logout() {
