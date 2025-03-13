@@ -50,6 +50,9 @@ public class AdminDashboardController {
         dataManager.addBookUpdateListener(this::refreshDashboard);
         dataManager.addMemberUpdateListener(this::refreshDashboard);
 
+        // Add a listener specifically for borrow records
+        dataManager.addBorrowUpdateListener(this::refreshDashboard);
+
         // เรียกโหลดข้อมูลครั้งแรก
         refreshDashboard();
     }
@@ -84,6 +87,7 @@ public class AdminDashboardController {
     }
 
     private void refreshDashboard() {
+        System.out.println("AdminDashboardController.refreshDashboard() called at: " + java.time.LocalDateTime.now());
         try {
             updateBookStats();
             updateMemberStats();
@@ -91,7 +95,7 @@ public class AdminDashboardController {
             updateRecentActivities();
             updatePopularBooks();
         } catch (Exception e) {
-            System.err.println("Error refreshing dashboard: " + e.getMessage());
+            System.err.println("Error in refreshDashboard: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -124,15 +128,23 @@ public class AdminDashboardController {
         }
     }
 
+    // ใน AdminDashboardController.java - แก้ไขเมธอด updateBorrowStats
     private void updateBorrowStats() {
         try {
             List<BorrowRecord> activeRecords = dataManager.getActiveBorrowRecords();
             List<BorrowRecord> overdueRecords = dataManager.getOverdueBorrowRecords();
 
-            currentBorrowsLabel.setText(String.valueOf(activeRecords.size()));
-            overdueBorrowsLabel.setText(overdueRecords.size() + " overdue");
+            System.out.println("Active borrow records: " + activeRecords.size());
+            System.out.println("Overdue records: " + overdueRecords.size());
+
+            javafx.application.Platform.runLater(() -> {
+                currentBorrowsLabel.setText(String.valueOf(activeRecords.size()));
+                overdueBorrowsLabel.setText(overdueRecords.size() + " overdue");
+                System.out.println("UI updated with borrow stats");
+            });
         } catch (Exception e) {
             System.err.println("Error updating borrow stats: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -141,12 +153,22 @@ public class AdminDashboardController {
             activityList.clear();
 
             List<BorrowRecord> allRecords = dataManager.getAllBorrowRecords();
+            System.out.println("Dashboard - All borrow records: " +
+                    (allRecords != null ? allRecords.size() : "null"));
+
             if (allRecords == null || allRecords.isEmpty()) {
                 return;
             }
 
-            // เรียงตามวันที่ล่าสุด
-            allRecords.sort((r1, r2) -> r2.getBorrowDate().compareTo(r1.getBorrowDate()));
+            // Sort by most recent date (borrow or return date)
+            allRecords.sort((r1, r2) -> {
+                // If returned, use return date, otherwise use borrow date
+                var date1 = r1.isReturned() && r1.getReturnDate() != null ?
+                        r1.getReturnDate() : r1.getBorrowDate();
+                var date2 = r2.isReturned() && r2.getReturnDate() != null ?
+                        r2.getReturnDate() : r2.getBorrowDate();
+                return date2.compareTo(date1); // Newest first
+            });
 
             // เพิ่มเฉพาะ 10 รายการล่าสุด
             int count = 0;
@@ -159,11 +181,13 @@ public class AdminDashboardController {
             }
 
             recentActivitiesTable.setItems(activityList);
+            System.out.println("Dashboard - Recent activities updated: " + activityList.size() + " items");
         } catch (Exception e) {
             System.err.println("Error updating activities: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     private void updatePopularBooks() {
         try {
@@ -199,4 +223,9 @@ public class AdminDashboardController {
             e.printStackTrace();
         }
     }
+    public void refreshData() {
+        refreshDashboard();
+    }
+
+
 }

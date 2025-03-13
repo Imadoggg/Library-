@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import java.util.Optional;
 
@@ -63,48 +62,7 @@ public class MemberManagementController {
         refreshMemberList();
     }
 
-    @FXML
-    private void handleAddMember() {
-        Dialog<Member> dialog = new Dialog<>();
-        dialog.setTitle("Add New Member");
-        dialog.setHeaderText("Please enter member information");
-
-        // Set the button types
-        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
-
-        // Create the form fields
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("Full Name");
-        TextField contactField = new TextField();
-        contactField.setPromptText("Phone Number");
-
-        grid.add(new Label("Full Name:"), 0, 0);
-        grid.add(nameField, 1, 0);
-        grid.add(new Label("Phone Number:"), 0, 1);
-        grid.add(contactField, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Convert the result to Member object when button is clicked
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButtonType) {
-                String id = "M" + String.format("%03d", dataManager.getAllMembers().size() + 1);
-                return new Member(id, nameField.getText(), contactField.getText());
-            }
-            return null;
-        });
-
-        Optional<Member> result = dialog.showAndWait();
-        result.ifPresent(member -> {
-            dataManager.addMember(member);
-            refreshMemberList();
-        });
-    }
+    // Removed handleAddMember method since users register themselves
 
     @FXML
     private void handleSearchMember() {
@@ -117,7 +75,8 @@ public class MemberManagementController {
             memberList.addAll(dataManager.getAllMembers().stream()
                     .filter(member ->
                             member.getName().toLowerCase().contains(searchText) ||
-                                    member.getId().toLowerCase().contains(searchText))
+                                    member.getId().toLowerCase().contains(searchText) ||
+                                    member.getContact().toLowerCase().contains(searchText))
                     .toList());
         }
 

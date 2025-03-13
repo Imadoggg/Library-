@@ -40,6 +40,11 @@
                 onAction="#handleLogin"
                 style="-fx-background-color: #3F51B5; -fx-text-fill: white;"
                 maxWidth="Infinity"/>
+
+        <HBox alignment="CENTER">
+            <Label text="Don't have an account? " />
+            <Hyperlink fx:id="registerLink" text="Register here" onAction="#handleRegisterLink"/>
+        </HBox>
     </VBox>
 
     <!-- Sample users info -->

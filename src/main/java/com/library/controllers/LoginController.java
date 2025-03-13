@@ -7,9 +7,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -23,6 +25,7 @@ public class LoginController {
     @FXML private VBox loginFormContainer;
     @FXML private Label titleLabel;
     @FXML private Label subtitleLabel;
+    @FXML private Hyperlink registerLink; // Add this line
 
     private LibraryDataManager dataManager;
 
@@ -52,7 +55,7 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // ล้างข้อความผิดพลาด
+        // Clear error message
         errorLabel.setVisible(false);
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -63,9 +66,9 @@ public class LoginController {
 
         if (dataManager.login(username, password)) {
             try {
-                // ตรวจสอบว่าเป็น admin หรือ user
+                // Check if admin or user
                 if (dataManager.isCurrentUserAdmin()) {
-                    // เปิดหน้า Admin Dashboard
+                    // Open Admin Dashboard
                     Parent root = FXMLLoader.load(getClass().getResource("/com/views/AdminMainView.fxml"));
                     Scene scene = new Scene(root);
                     Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -73,7 +76,7 @@ public class LoginController {
                     stage.setTitle("Admin Dashboard - Library Management System");
                     stage.show();
                 } else {
-                    // เปิดหน้า User Main
+                    // Open User Main
                     Parent root = FXMLLoader.load(getClass().getResource("/com/views/UserMainView.fxml"));
                     Scene scene = new Scene(root);
                     Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -89,6 +92,36 @@ public class LoginController {
         } else {
             errorLabel.setText("Invalid username or password");
             errorLabel.setVisible(true);
+        }
+    }
+
+    @FXML
+    private void handleRegisterLink() {
+        try {
+            // Load the registration form
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/RegisterView.fxml"));
+            Parent root = loader.load();
+
+            // Create a new popup window (Stage)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Library Management System - Register");
+            popupStage.setScene(new Scene(root, 500, 600));
+
+            // Make it modal (user must close it before returning to login)
+            popupStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            // Set the owner to the login window
+            popupStage.initOwner(loginButton.getScene().getWindow());
+
+            // Configure the controller
+            RegisterController controller = loader.getController();
+            controller.setStage(popupStage);
+
+            // Show the popup
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Error loading registration page");
         }
     }
 

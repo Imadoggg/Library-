@@ -42,6 +42,7 @@ public class BorrowRecordDAO {
                 row[5] = rs.getBoolean("returned");
                 rawData.add(row);
             }
+            System.out.println("BorrowRecordDAO: Found " + rawData.size() + " raw records from database");
         } catch (SQLException e) {
             System.err.println("Error fetching borrow records: " + e.getMessage());
             e.printStackTrace();
@@ -73,7 +74,7 @@ public class BorrowRecordDAO {
                 records.add(record);
             }
         }
-
+        System.out.println("BorrowRecordDAO: Converted " + records.size() + " valid BorrowRecord objects");
         return records;
     }
 
@@ -187,7 +188,9 @@ public class BorrowRecordDAO {
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
                         bookId = rs.getInt("book_id");
+                        System.out.println("Found book ID: " + bookId + " for borrow record: " + recordId);
                     } else {
+                        System.out.println("No borrow record found with ID: " + recordId);
                         return false; // ไม่พบบันทึกการยืม
                     }
                 }
@@ -211,6 +214,8 @@ public class BorrowRecordDAO {
                         bookStmt.setInt(2, bookId);
 
                         int bookRowsAffected = bookStmt.executeUpdate();
+                        System.out.println("Updated book availability, rows affected: " + bookRowsAffected);
+
 
                         if (bookRowsAffected > 0) {
                             conn.commit();

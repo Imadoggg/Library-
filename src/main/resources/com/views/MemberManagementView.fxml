@@ -14,8 +14,7 @@
     <HBox alignment="CENTER_LEFT" spacing="20">
         <Label text="Member Management" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="+ Add New Member" onAction="#handleAddMember"
-                style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+        <!-- Removed Add Member button since users register themselves -->
     </HBox>
 
     <!-- Search and Filter -->
@@ -43,14 +42,14 @@
     <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);">
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label text="All Members" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
-            <Label text="(3 members)" style="-fx-text-fill: #757575;"/>
+            <Label text="(Members are created automatically upon registration)" style="-fx-text-fill: #757575;"/>
         </HBox>
 
         <TableView fx:id="memberTableView" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="idColumn" text="Member ID" prefWidth="120"/>
                 <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
-                <TableColumn fx:id="contactColumn" text="Phone" prefWidth="150"/>
+                <TableColumn fx:id="contactColumn" text="Username/Contact" prefWidth="150"/>
                 <TableColumn text="Status" prefWidth="120"/>
                 <TableColumn text="Borrowed Items" prefWidth="120"/>
                 <TableColumn text="Actions" prefWidth="150"/>

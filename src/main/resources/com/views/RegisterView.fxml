@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controllers.RegisterController"
+      spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <VBox alignment="CENTER" spacing="10">
+        <Label fx:id="titleLabel" text="Library Management System" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+        <Label fx:id="subtitleLabel" text="Create New Account" style="-fx-font-size: 14;"/>
+    </VBox>
+
+    <VBox fx:id="registerFormContainer"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;"
+          maxWidth="400"
+          spacing="15"
+          alignment="CENTER_LEFT">
+
+        <Label text="Username" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="usernameField" promptText="Enter username"/>
+
+        <Label text="Password" style="-fx-font-weight: bold;"/>
+        <PasswordField fx:id="passwordField" promptText="Enter password"/>
+
+        <Label text="Confirm Password" style="-fx-font-weight: bold;"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm password"/>
+
+        <Label text="Full Name" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="fullNameField" promptText="Enter your full name"/>
+
+        <Label text="Email" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="emailField" promptText="Enter your email"/>
+
+        <Label text="Phone Number" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="phoneField" promptText="Enter your phone number"/>
+
+        <Label fx:id="errorLabel" textFill="RED" visible="false"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="registerButton"
+                    text="Register"
+                    onAction="#handleRegister"
+                    style="-fx-background-color: #3F51B5; -fx-text-fill: white;"
+                    prefWidth="150"/>
+
+            <Button fx:id="cancelButton"
+                    text="Cancel"
+                    onAction="#handleCancel"
+                    style="-fx-background-color: #F44336; -fx-text-fill: white;"
+                    prefWidth="150"/>
+        </HBox>
+    </VBox>
+
+    <HBox alignment="CENTER">
+        <Label text="Already have an account? " />
+        <Hyperlink text="Login here" onAction="#handleLoginLink"/>
+    </HBox>
+</VBox>

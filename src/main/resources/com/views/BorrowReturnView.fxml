@@ -14,18 +14,26 @@
     <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
         <Label text="Borrow Books" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
+        <!-- Current user label (new) -->
+        <Label fx:id="currentUserLabel"
+               text="Borrowing as: User"
+               style="-fx-text-fill: #2196F3; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
         <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding-top: 10;">
-            <ComboBox fx:id="memberComboBox" promptText="Select Member" prefWidth="180"/>
-            <ComboBox fx:id="bookComboBox" promptText="Select Book" prefWidth="180"/>
+            <!-- Member selection removed - only borrow for current user -->
+            <ComboBox fx:id="bookComboBox" promptText="Select Book" prefWidth="250"/>
             <Button text="Borrow"
+                    fx:id="borrowButton"
                     onAction="#handleBorrowBook"
                     style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Label fx:id="adminNoteLabel" text="Note: Administrators cannot borrow books"
+                   style="-fx-text-fill: #F44336; -fx-font-style: italic;" visible="false"/>
         </HBox>
     </VBox>
 
     <!-- Return section -->
     <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
-        <Label text="Currently Borrowed Books" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+        <Label fx:id="borrowedBooksLabel" text="My Borrowed Books" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
         <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS"
                    style="-fx-background-color: transparent;">
@@ -37,8 +45,10 @@
                 <TableColumn fx:id="actionColumn" text="Actions" prefWidth="100"/>
             </columns>
             <placeholder>
-                <Label text="No books are currently borrowed" />
+                <Label text="You don't have any borrowed books" />
             </placeholder>
         </TableView>
+        <Label text="Note: Only administrators can process book returns"
+               style="-fx-text-fill: #757575; -fx-font-style: italic; -fx-padding: 5 0 0 0;"/>
     </VBox>
 </VBox>

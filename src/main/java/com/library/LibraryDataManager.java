@@ -29,14 +29,29 @@ public class LibraryDataManager {
     private User currentUser;
     private List<Runnable> memberUpdateListeners = new ArrayList<>();
     private List<Runnable> bookUpdateListeners = new ArrayList<>();
+    private List<Runnable> borrowUpdateListeners = new ArrayList<>();
 
     private static LibraryDataManager instance;
+
+    public void addBorrowUpdateListener(Runnable listener) {
+        System.out.println("Adding borrow update listener: " + listener.getClass().getName());
+        // ตรวจสอบว่ามี listener นี้อยู่แล้วหรือไม่
+        if (!borrowUpdateListeners.contains(listener)) {
+            borrowUpdateListeners.add(listener);
+            System.out.println("Added listener successfully. Total listeners: " + borrowUpdateListeners.size());
+        } else {
+            System.out.println("Listener already exists. Not added.");
+        }
+    }
 
     private LibraryDataManager() {
         bookDAO = new BookDAO();
         memberDAO = new MemberDAO();
         borrowRecordDAO = new BorrowRecordDAO();
         userDAO = new UserDAO();
+    }
+    protected void notifyBorrowListeners() {
+        borrowUpdateListeners.forEach(Runnable::run);
     }
 
     public static LibraryDataManager getInstance() {
@@ -197,6 +212,8 @@ public class LibraryDataManager {
      * @return บันทึกการยืมหนังสือที่สร้างใหม่ หรือ null ถ้าไม่สำเร็จ
      */
     public BorrowRecord createBorrowRecord(String bookId, String memberId) {
+        System.out.println("LibraryDataManager: Creating borrow record for book: " + bookId + ", member: " + memberId);
+
         Book book = bookDAO.getBookById(bookId);
         Member member = memberDAO.getMemberById(memberId);
 
@@ -206,22 +223,64 @@ public class LibraryDataManager {
 
             boolean success = borrowRecordDAO.addBorrowRecord(record);
             if (success) {
-                notifyBookListeners(); // แจ้งเตือนผู้ฟัง
+                System.out.println("LibraryDataManager: Borrow record created successfully, notifying listeners");
+
+                // กำหนดให้แจ้งเตือนทุก listener ทันที
+                try {
+                    notifyBookListeners();
+                    System.out.println("LibraryDataManager: Book listeners notified");
+                } catch (Exception e) {
+                    System.err.println("Error notifying book listeners: " + e.getMessage());
+                }
+
+                try {
+                    notifyBorrowListeners();
+                    System.out.println("LibraryDataManager: Borrow listeners notified");
+                } catch (Exception e) {
+                    System.err.println("Error notifying borrow listeners: " + e.getMessage());
+                }
+
                 return record;
             }
+        } else {
+            // Log why borrow failed
+            if (book == null) System.out.println("LibraryDataManager: Book not found with ID: " + bookId);
+            else if (member == null) System.out.println("LibraryDataManager: Member not found with ID: " + memberId);
+            else if (!book.isAvailable()) System.out.println("LibraryDataManager: Book not available: " + bookId);
         }
+
         return null;
     }
     /**
      * บันทึกการคืนหนังสือ
-     * @param borrowId รหัสของบันทึกการยืม
-     * @return true ถ้าคืนสำเร็จ, false ถ้าไม่สำเร็จ
+     @param borrowId รหัสของบันทึกการยืม
+      * @return true ถ้าคืนสำเร็จ, false ถ้าไม่สำเร็จ
      */
     public boolean returnBook(String borrowId) {
+        System.out.println("LibraryDataManager: Attempting to return book, borrow ID: " + borrowId);
         boolean result = borrowRecordDAO.returnBook(borrowId);
+
         if (result) {
-            notifyBookListeners(); // แจ้งเตือนผู้ฟัง
+            System.out.println("LibraryDataManager: Book return successful, notifying listeners");
+
+            // กำหนดให้แจ้งเตือนทุก listener ทันที
+            try {
+                notifyBookListeners();
+                System.out.println("LibraryDataManager: Book listeners notified");
+            } catch (Exception e) {
+                System.err.println("Error notifying book listeners: " + e.getMessage());
+            }
+
+            try {
+                notifyBorrowListeners();
+                System.out.println("LibraryDataManager: Borrow listeners notified");
+            } catch (Exception e) {
+                System.err.println("Error notifying borrow listeners: " + e.getMessage());
+            }
+        } else {
+            System.out.println("LibraryDataManager: Book return failed");
         }
+
         return result;
     }
 
