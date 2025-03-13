@@ -225,17 +225,4 @@ public class LibraryDataManager {
         return result;
     }
 
-    public boolean updateUser(User user) {
-        return userDAO.updateUser(user);
-    }
-
-
-    public boolean validateCredentials(String username, String password) {
-        return userDAO.validateCredentials(username, password);
-    }
-
-
-    public boolean changePassword(String username, String newPassword) {
-        return userDAO.changePassword(username, newPassword);
-    }
 }

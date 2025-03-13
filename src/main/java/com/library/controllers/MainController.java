@@ -37,19 +37,15 @@ public class MainController {
     }
 
     private void showTabs(String role) {
-        // เปิดใช้งานแท็บตามบทบาท
         if ("admin".equals(role)) {
-            // Admin เข้าถึงได้ทุกแท็บ
             mainTabPane.getTabs().forEach(tab -> tab.setDisable(false));
         } else if ("user".equals(role)) {
-            // User เข้าถึงได้เฉพาะบางแท็บ (ตัวอย่าง - คุณสามารถปรับได้)
             loginTab.setDisable(false);
             bookTab.setDisable(false);
             borrowReturnTab.setDisable(false);
-            memberTab.setDisable(true); // User ไม่สามารถจัดการสมาชิกได้
+            memberTab.setDisable(true);
         }
 
-        // เลือกแท็บแรกที่ไม่ใช่แท็บล็อกอิน
         for (Tab tab : mainTabPane.getTabs()) {
             if (tab != loginTab && !tab.isDisable()) {
                 mainTabPane.getSelectionModel().select(tab);
@@ -68,7 +64,6 @@ public class MainController {
             return;
         }
 
-        // ตรวจสอบการล็อกอินอย่างง่าย
         if ("admin".equals(username) && "admin".equals(password)) {
             currentRole = "admin";
             showTabs(currentRole);
@@ -82,7 +77,6 @@ public class MainController {
 
     @FXML
     private void handleExit() {
-        // ถ้าล็อกอินแล้ว ให้ถามก่อนออก
         if (currentRole != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("ยืนยันการออกจากระบบ");
@@ -97,7 +91,6 @@ public class MainController {
                 }
             });
         } else {
-            // ถ้ายังไม่ได้ล็อกอิน ให้ออกจากโปรแกรมเลย
             Platform.exit();
         }
     }

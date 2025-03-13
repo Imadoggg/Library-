@@ -140,11 +140,6 @@ public class BorrowRecord {
         getBook().setAvailable(true);
     }
 
-    public String getBorrowStatus() {
-        if (isReturned()) return "คืนแล้ว";
-        if (isOverdue()) return "เกินกำหนด";
-        return "รอคืน";
-    }
 
     public String getFormattedBorrowDate() {
         return borrowDate.get() != null ? borrowDate.get().format(formatter) : "";
