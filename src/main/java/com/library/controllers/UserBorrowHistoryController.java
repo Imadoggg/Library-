@@ -42,7 +42,6 @@ public class UserBorrowHistoryController {
                 "ปีนี้"
         );
 
-        // เลือก "ทั้งหมด" เป็นค่าเริ่มต้น
         periodComboBox.getSelectionModel().selectFirst();
 
         setupTableColumns();
@@ -80,7 +79,6 @@ public class UserBorrowHistoryController {
         if (currentUser != null) {
             String period = periodComboBox.getValue();
 
-            // คำนวณวันที่เริ่มต้นตามช่วงเวลาที่เลือก
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime effectiveStartDate = null;
 
@@ -96,9 +94,8 @@ public class UserBorrowHistoryController {
 
             borrowHistory.clear();
 
-            // กรองรายการตามวันที่เริ่มต้น
             if (effectiveStartDate != null) {
-                // สร้างตัวแปร final เพื่อใช้ใน lambda
+                //lambda!!!!
                 final LocalDateTime finalStartDate = effectiveStartDate;
                 borrowHistory.addAll(
                         dataManager.getAllBorrowRecords().stream()

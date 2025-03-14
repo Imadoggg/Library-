@@ -38,16 +38,12 @@ public class UserBookSearchController {
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
 
-        // ตั้งค่าการสลับมุมมอง
         setupViewToggle();
 
-        // ตั้งค่าคอลัมน์ตาราง
         setupTableColumns();
 
-        // ตั้งค่า dropdown หมวดหมู่
         setupCategoryComboBox();
 
-        // โหลดหนังสือเริ่มต้น
         handleSearch();
     }
 
@@ -86,7 +82,6 @@ public class UserBookSearchController {
             }
         });
 
-        // คอลัมน์ปุ่มดำเนินการ
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button detailButton = new Button("รายละเอียด");
 

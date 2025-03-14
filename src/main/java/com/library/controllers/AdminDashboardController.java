@@ -43,23 +43,19 @@ public class AdminDashboardController {
         activityList = FXCollections.observableArrayList();
         popularBooksList = FXCollections.observableArrayList();
 
-        // ตั้งค่าการแสดงผลคอลัมน์
+
         setupTableColumns();
 
-        // ลงทะเบียน listeners เพื่อรับการแจ้งเตือนการเปลี่ยนแปลงข้อมูล
         dataManager.addBookUpdateListener(this::refreshDashboard);
         dataManager.addMemberUpdateListener(this::refreshDashboard);
 
-        // Add a listener specifically for borrow records
         dataManager.addBorrowUpdateListener(this::refreshDashboard);
 
-        // เรียกโหลดข้อมูลครั้งแรก
         refreshDashboard();
     }
 
     private void setupTableColumns() {
         try {
-            // ตรวจสอบว่าคอลัมน์ไม่เป็น null ก่อนกำหนดค่า
             if (dateTimeColumn != null) {
                 dateTimeColumn.setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getBorrowDate().format(formatter)));
@@ -128,7 +124,6 @@ public class AdminDashboardController {
         }
     }
 
-    // ใน AdminDashboardController.java - แก้ไขเมธอด updateBorrowStats
     private void updateBorrowStats() {
         try {
             List<BorrowRecord> activeRecords = dataManager.getActiveBorrowRecords();
@@ -160,18 +155,15 @@ public class AdminDashboardController {
                 return;
             }
 
-            // Sort by most recent date (borrow or return date)
             allRecords.sort((r1, r2) -> {
-                // If returned, use return date, otherwise use borrow date
                 var date1 = r1.isReturned() && r1.getReturnDate() != null ?
                         r1.getReturnDate() : r1.getBorrowDate();
                 var date2 = r2.isReturned() && r2.getReturnDate() != null ?
                         r2.getReturnDate() : r2.getBorrowDate();
-                return date2.compareTo(date1); // Newest first
+                return date2.compareTo(date1);
             });
 
-            // เพิ่มเฉพาะ 10 รายการล่าสุด
-            int count = 0;
+          int count = 0;
             for (BorrowRecord record : allRecords) {
                 if (record != null) {
                     activityList.add(record);
@@ -204,11 +196,9 @@ public class AdminDashboardController {
                 }
             }
 
-            // เรียงตามจำนวนการยืม
             List<Map.Entry<String, Integer>> sortedBooks = new ArrayList<>(bookCounts.entrySet());
             sortedBooks.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
-            // เพิ่ม 5 อันดับแรก
             int count = 0;
             for (Map.Entry<String, Integer> entry : sortedBooks) {
                 String bookTitle = bookTitles.get(entry.getKey());

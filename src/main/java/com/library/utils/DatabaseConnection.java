@@ -33,11 +33,11 @@ public class DatabaseConnection {
                 System.err.println(" Database connection error: " + e.getMessage());
                 retries--;
                 if (retries == 0) {
-                    throw e; // ถ้าลองครบ 3 ครั้งแล้วยังไม่ได้ ก็โยน Exception ออกไป
+                    throw e;
                 }
                 System.out.println("Retrying to connect...");
                 try {
-                    Thread.sleep(2000); // รอ 2 วินาทีก่อนลองใหม่
+                    Thread.sleep(2000);
                 } catch (InterruptedException ignored) {}
             }
         }
@@ -55,7 +55,6 @@ public class DatabaseConnection {
         }
     }
 
-    // ปิด connection อัตโนมัติเมื่อโปรแกรมปิด
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(DatabaseConnection::closeConnection));
     }

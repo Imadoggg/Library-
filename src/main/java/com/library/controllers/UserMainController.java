@@ -27,12 +27,10 @@ public class UserMainController {
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
 
-        // ตั้งค่าชื่อผู้ใช้
         if (dataManager.getCurrentUser() != null) {
             usernameLabel.setText(dataManager.getCurrentUser().getName());
         }
 
-        // แสดงหน้าหลักเมื่อเริ่มต้น
         showHomepage();
     }
 
@@ -68,7 +66,6 @@ public class UserMainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/BorrowReturnView.fxml"));
             Parent borrowReturnView = loader.load();
 
-            // โหลดและแสดงหน้าการยืมคืนในพื้นที่เนื้อหา
             contentArea.getChildren().clear();
             contentArea.getChildren().add(borrowReturnView);
         } catch (IOException e) {
@@ -84,14 +81,12 @@ public class UserMainController {
 
     @FXML
     private void showBorrowHistory() {
-        // เพิ่ม log เพื่อตรวจสอบ
         System.out.println("Attempting to load borrow history view");
         loadContent("/com/views/UserBorrowHistoryView.fxml");
     }
 
     @FXML
     private void showProfile() {
-        // เพิ่ม log เพื่อตรวจสอบ
         System.out.println("Attempting to load profile view");
         loadContent("/com/views/UserProfileView.fxml");
     }
@@ -101,15 +96,13 @@ public class UserMainController {
         try {
             System.out.println("Trying to load: " + fxmlPath);
 
-            // ลองหาไฟล์ด้วยหลายวิธี
             URL resource = null;
 
-            // วิธีที่ 1: ใช้ getResource ปกติ
             resource = getClass().getResource(fxmlPath);
             if (resource != null) {
                 System.out.println("Found resource using getClass().getResource()");
             } else {
-                // วิธีที่ 2: ลองใช้ ClassLoader
+
                 String relativePath = fxmlPath.startsWith("/") ? fxmlPath.substring(1) : fxmlPath;
                 resource = getClass().getClassLoader().getResource(relativePath);
                 if (resource != null) {
@@ -120,7 +113,7 @@ public class UserMainController {
                     contentArea.getChildren().add(view);
                     return;
                 } else {
-                    // วิธีที่ 3: ลองเส้นทางอื่น
+
                     String altPath = "/views" + fxmlPath.substring(fxmlPath.lastIndexOf('/'));
                     resource = getClass().getResource(altPath);
                     if (resource != null) {
@@ -146,7 +139,6 @@ public class UserMainController {
             e.printStackTrace();
             System.err.println("ไม่สามารถโหลด " + fxmlPath + ": " + e.getMessage());
 
-            // แสดงข้อความแจ้งเตือนบนหน้าจอ
             Label errorLabel = new Label("ไม่พบไฟล์ FXML: " + fxmlPath);
             errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
             contentArea.getChildren().clear();

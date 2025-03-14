@@ -56,13 +56,10 @@ public class UserHomepageController {
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
 
-        // ตั้งค่าคอลัมน์ตาราง
         setupTableColumns();
 
-        // โหลดหนังสือแนะนำ
         loadFeaturedBooks();
 
-        // โหลดหนังสือที่พร้อมให้ยืม
         loadAvailableBooks();
     }
 
@@ -72,7 +69,6 @@ public class UserHomepageController {
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 
-        // คอลัมน์ปุ่มดำเนินการ
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button detailButton = new Button("รายละเอียด");
 
@@ -99,7 +95,6 @@ public class UserHomepageController {
     private void loadFeaturedBooks() {
         List<Book> books = dataManager.getAllBooks();
 
-        // แสดงเพียง 5 เล่มแรกเป็นหนังสือแนะนำ
         books.stream().limit(5).forEach(book -> {
             VBox bookCard = createBookCard(book);
             featuredBooksBox.getChildren().add(bookCard);
@@ -113,7 +108,6 @@ public class UserHomepageController {
         card.setMaxWidth(180);
         card.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);");
 
-        // สร้างพื้นที่สำหรับรูปปก (ใส่สีเทา)
         VBox cover = new VBox();
         cover.setMinHeight(200);
         cover.setMaxHeight(200);
@@ -166,7 +160,6 @@ public class UserHomepageController {
     }
 
     private void showBookDetail(Book book) {
-        // ในที่นี้แค่แสดง alert สำหรับตัวอย่าง
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("รายละเอียดหนังสือ");
         alert.setHeaderText(book.getTitle());
@@ -184,18 +177,15 @@ public class UserHomepageController {
     @FXML
     private void openBorrowPage() {
         try {
-            // ตรวจสอบว่ามี mainBorderPane หรือไม่
             BorderPane mainBorderPane = (BorderPane) searchField.getScene().getRoot();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/BorrowReturnView.fxml"));
             Parent borrowView = loader.load();
 
-            // วางหน้ายืมหนังสือตรงส่วนกลางของ BorderPane
             mainBorderPane.setCenter(borrowView);
         } catch (IOException e) {
             e.printStackTrace();
 
-            // แสดง Alert หากโหลดหน้าไม่สำเร็จ
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ข้อผิดพลาด");
             alert.setHeaderText("ไม่สามารถโหลดหน้ายืมหนังสือได้");
@@ -207,16 +197,13 @@ public class UserHomepageController {
     @FXML
     private void handleLogout() {
         try {
-            // โหลดหน้า Login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/LoginView.fxml"));
             Parent loginView = loader.load();
 
-            // ดึง Stage ปัจจุบัน
             Stage stage = (Stage) searchField.getScene().getWindow();
             stage.setScene(new Scene(loginView, 600, 400));
             stage.setTitle("ระบบจัดการห้องสมุด - เข้าสู่ระบบ");
 
-            // ล้างข้อมูลผู้ใช้ปัจจุบัน
             LibraryDataManager.getInstance().logout();
         } catch (IOException e) {
             e.printStackTrace();
@@ -232,7 +219,6 @@ public class UserHomepageController {
     private void setupCarousel() {
         featuredBooks = dataManager.getAllBooks().stream().limit(5).collect(Collectors.toList());
 
-        // สร้างตัวบ่งชี้ (indicator dots)
         for (int i = 0; i < featuredBooks.size(); i++) {
             Label dot = new Label("•");
             final int index = i;
@@ -241,28 +227,23 @@ public class UserHomepageController {
             indicatorBox.getChildren().add(dot);
         }
 
-        // ตั้งค่าปุ่มเลื่อน
         prevButton.setOnAction(e -> showPage(currentPage - 1));
         nextButton.setOnAction(e -> showPage(currentPage + 1));
 
-        // แสดงหน้าแรก
         showPage(0);
     }
 
     private void showPage(int pageIndex) {
-        // ตรวจสอบขอบเขต
         if (pageIndex < 0) pageIndex = featuredBooks.size() - 1;
         if (pageIndex >= featuredBooks.size()) pageIndex = 0;
 
         currentPage = pageIndex;
 
-        // อัพเดต dots
         for (int i = 0; i < indicatorBox.getChildren().size(); i++) {
             Label dot = (Label) indicatorBox.getChildren().get(i);
             dot.setStyle("-fx-font-size: 30; -fx-text-fill: " + (i == currentPage ? "#2196F3" : "#E0E0E0") + ";");
         }
 
-        // สร้างการ์ดหนังสือสำหรับหน้าปัจจุบัน
         carouselContainer.getChildren().clear();
 
         Book currentBook = featuredBooks.get(currentPage);
@@ -270,13 +251,11 @@ public class UserHomepageController {
     }
 
     private Pane createLargeBookCard(Book book) {
-        // สร้างการ์ดขนาดใหญ่
         HBox card = new HBox(20);
         card.setPrefWidth(700);
         card.setPrefHeight(300);
         card.setStyle("-fx-background-color: linear-gradient(to right, #1a237e, #303F9F); -fx-background-radius: 10; -fx-padding: 20;");
 
-        // ปกหนังสือ
         StackPane coverPane = new StackPane();
         coverPane.setMinWidth(200);
         coverPane.setMaxWidth(200);
@@ -287,7 +266,6 @@ public class UserHomepageController {
         initialLabel.setStyle("-fx-font-size: 80; -fx-text-fill: #303F9F; -fx-font-weight: bold;");
         coverPane.getChildren().add(initialLabel);
 
-        // รายละเอียดหนังสือ
         VBox detailsBox = new VBox(15);
         detailsBox.setAlignment(Pos.CENTER_LEFT);
         detailsBox.setPrefHeight(260);
@@ -302,7 +280,6 @@ public class UserHomepageController {
         Label categoryLabel = new Label("หมวดหมู่: " + book.getCategory());
         categoryLabel.setStyle("-fx-font-size: 14; -fx-text-fill: #E0E0E0;");
 
-        // แสดงดาว
         HBox ratingBox = new HBox(5);
         ratingBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -316,14 +293,12 @@ public class UserHomepageController {
         ratingText.setStyle("-fx-text-fill: #E0E0E0; -fx-font-size: 14;");
         ratingBox.getChildren().add(ratingText);
 
-        // คำอธิบายสั้นๆ
         Label descriptionLabel = new Label("หนังสือ " + book.getTitle() + " เป็นหนังสือที่ได้รับความนิยมในหมวด " +
                 book.getCategory() + " เขียนโดย " + book.getAuthor() +
                 " เหมาะสำหรับผู้ที่สนใจในด้านนี้");
         descriptionLabel.setWrapText(true);
         descriptionLabel.setStyle("-fx-text-fill: #E0E0E0; -fx-font-size: 14;");
 
-        // ปุ่มดำเนินการ
         HBox actionBox = new HBox(10);
 
         Button detailButton = new Button("รายละเอียด");

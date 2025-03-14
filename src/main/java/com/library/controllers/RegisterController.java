@@ -42,7 +42,6 @@ public class RegisterController {
 
     private UserDAO userDAO;
 
-    // Email validation regex pattern
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
     );
@@ -164,17 +163,16 @@ public class RegisterController {
     }
 
     private boolean registerUser(String username, String password, String fullName, String email, String phone) {
-        // Use SQL's SHA2 function directly in the query for password hashing
         String query = "INSERT INTO users (username, password, name, email, role) VALUES (?, SHA2(?, 256), ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password); // Password will be hashed by MySQL SHA2 function
+            stmt.setString(2, password);
             stmt.setString(3, fullName);
             stmt.setString(4, email);
-            stmt.setString(5, UserRole.USER.name()); // Default role is USER
+            stmt.setString(5, UserRole.USER.name());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -185,8 +183,7 @@ public class RegisterController {
         }
     }
 
-    // We use SQL's SHA2 function for password hashing directly in the query
-// This method is kept for reference but not used
+
 
     private Stage stage;
 
@@ -196,7 +193,6 @@ public class RegisterController {
 
     @FXML
     private void handleCancel() {
-        // Just close the popup window
         if (stage != null) {
             stage.close();
         }
@@ -210,7 +206,6 @@ public class RegisterController {
         }
     }
 
-    // navigateToLogin method removed as we're using popup now
 
     private void showError(String message) {
         errorLabel.setText(message);

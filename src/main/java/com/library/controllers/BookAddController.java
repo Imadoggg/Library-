@@ -52,7 +52,6 @@ public class BookAddController {
         bookDAO = new BookDAO();
         errorLabel.setVisible(false);
 
-        // โหลดรายการหมวดหมู่จากฐานข้อมูล หรือใช้รายการตายตัวในตัวอย่างนี้
         categories = FXCollections.observableArrayList(
                 "นิยาย", "นิยายวิทยาศาสตร์", "คอมพิวเตอร์", "การเงิน", "การจัดการ",
                 "ประวัติศาสตร์", "จิตวิทยา", "ปรัชญา", "ศาสนา", "ศิลปะ", "เกษตรกรรม", "อื่นๆ"
@@ -65,7 +64,6 @@ public class BookAddController {
     private void handleSave(ActionEvent event) {
         errorLabel.setVisible(false);
 
-        // 1. ตรวจสอบข้อมูล
         if (titleField.getText().isEmpty()) {
             showError("กรุณาระบุชื่อหนังสือ");
             return;
@@ -82,7 +80,7 @@ public class BookAddController {
         }
 
         Book newBook = new Book(
-                null, // ส่ง null สำหรับ id เพราะจะถูกสร้างโดย auto-increment
+                null,
                 titleField.getText(),
                 authorField.getText(),
                 categoryComboBox.getValue()
@@ -90,18 +88,16 @@ public class BookAddController {
 
         newBook.setAvailable(availableCheckBox.isSelected());
 
-        // 3. บันทึกลงฐานข้อมูล
         boolean success = bookDAO.addBook(newBook);
 
         if (success) {
             showAlert("เพิ่มหนังสือสำเร็จ", "เพิ่มหนังสือ \"" + newBook.getTitle() + "\" เข้าระบบเรียบร้อยแล้ว");
-            handleCancel(event); // กลับไปหน้าจัดการหนังสือ
+            handleCancel(event);
         } else {
             showError("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองอีกครั้ง");
         }
         if (success) {
             showAlert("เพิ่มหนังสือสำเร็จ", "เพิ่มหนังสือ \"" + newBook.getTitle() + "\" เข้าระบบเรียบร้อยแล้ว");
-            // ปิด popup แทนการกลับไปหน้าจัดการหนังสือ
             if (stage != null) {
                 stage.close();
             }

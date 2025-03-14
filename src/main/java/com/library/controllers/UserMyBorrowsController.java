@@ -45,7 +45,6 @@ public class UserMyBorrowsController {
                 new SimpleStringProperty(cellData.getValue().getBorrowDate().format(dateFormatter)));
 
         dueDateColumn.setCellValueFactory(cellData -> {
-            // สมมติให้กำหนดคืน 7 วันหลังจากวันที่ยืม
             LocalDateTime dueDate = cellData.getValue().getBorrowDate().plusDays(7);
             return new SimpleStringProperty(dueDate.format(dateFormatter));
         });

@@ -35,7 +35,6 @@ public class LibraryDataManager {
 
     public void addBorrowUpdateListener(Runnable listener) {
         System.out.println("Adding borrow update listener: " + listener.getClass().getName());
-        // ตรวจสอบว่ามี listener นี้อยู่แล้วหรือไม่
         if (!borrowUpdateListeners.contains(listener)) {
             borrowUpdateListeners.add(listener);
             System.out.println("Added listener successfully. Total listeners: " + borrowUpdateListeners.size());
@@ -81,6 +80,7 @@ public class LibraryDataManager {
         bookUpdateListeners.forEach(Runnable::run);
     }
 
+
     // Book related methods
     public List<Book> getAllBooks() {
         return bookDAO.getAllBooks();
@@ -98,9 +98,11 @@ public class LibraryDataManager {
         return bookDAO.getBookById(id);
     }
 
+
     public List<Book> findBooksByTitle(String title) {
         return bookDAO.findBooksByTitle(title);
     }
+
 
     public List<Book> findBooksByCategory(String category) {
         if (category == null || category.trim().isEmpty() ||
@@ -127,7 +129,6 @@ public class LibraryDataManager {
         return memberDAO.getMemberById(id);
     }
 
-    // Borrow record related methods - เพิ่มเติมตามความเหมาะสม
 
     public boolean login(String username, String password) {
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
@@ -139,7 +140,6 @@ public class LibraryDataManager {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                // สำคัญ: ต้องดึงข้อมูลผู้ใช้และกำหนดค่า currentUser
                 this.currentUser = userDAO.getUserByUsername(username);
                 return true;
             }
@@ -177,40 +177,25 @@ public class LibraryDataManager {
         return currentUser != null && currentUser.getRole() == UserRole.ADMIN;
     }
 
-    // Application shutdown
     public void shutdown() {
         DatabaseConnection.closeConnection();
     }
-    /**
-     * ดึงบันทึกการยืม-คืนทั้งหมด
-     */
 
-    /**
-     * ดึงบันทึกการยืม-คืนที่ยังไม่ได้คืน
-     */
     public List<BorrowRecord> getActiveBorrowRecords() {
         return borrowRecordDAO.getActiveBorrowRecords();
     }
 
-    /**
-     * ดึงบันทึกการยืม-คืนของสมาชิกคนใดคนหนึ่ง
-     */
+
     public List<BorrowRecord> getBorrowRecordsByMember(String memberId) {
         return borrowRecordDAO.getBorrowRecordsByMember(memberId);
     }
 
-    /**
-     * ดึงบันทึกการยืม-คืนที่เกินกำหนด
-     */
+
     public List<BorrowRecord> getOverdueBorrowRecords() {
         return borrowRecordDAO.getOverdueBorrowRecords();
     }
-    /**
-     * สร้างบันทึกการยืมหนังสือใหม่
-     * @param bookId รหัสหนังสือ
-     * @param memberId รหัสสมาชิก
-     * @return บันทึกการยืมหนังสือที่สร้างใหม่ หรือ null ถ้าไม่สำเร็จ
-     */
+
+
     public BorrowRecord createBorrowRecord(String bookId, String memberId) {
         System.out.println("LibraryDataManager: Creating borrow record for book: " + bookId + ", member: " + memberId);
 
@@ -243,7 +228,6 @@ public class LibraryDataManager {
                 return record;
             }
         } else {
-            // Log why borrow failed
             if (book == null) System.out.println("LibraryDataManager: Book not found with ID: " + bookId);
             else if (member == null) System.out.println("LibraryDataManager: Member not found with ID: " + memberId);
             else if (!book.isAvailable()) System.out.println("LibraryDataManager: Book not available: " + bookId);
@@ -251,11 +235,8 @@ public class LibraryDataManager {
 
         return null;
     }
-    /**
-     * บันทึกการคืนหนังสือ
-     @param borrowId รหัสของบันทึกการยืม
-      * @return true ถ้าคืนสำเร็จ, false ถ้าไม่สำเร็จ
-     */
+
+
     public boolean returnBook(String borrowId) {
         System.out.println("LibraryDataManager: Attempting to return book, borrow ID: " + borrowId);
         boolean result = borrowRecordDAO.returnBook(borrowId);
@@ -263,7 +244,6 @@ public class LibraryDataManager {
         if (result) {
             System.out.println("LibraryDataManager: Book return successful, notifying listeners");
 
-            // กำหนดให้แจ้งเตือนทุก listener ทันที
             try {
                 notifyBookListeners();
                 System.out.println("LibraryDataManager: Book listeners notified");

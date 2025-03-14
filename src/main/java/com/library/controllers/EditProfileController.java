@@ -65,7 +65,6 @@ public class EditProfileController {
 
     @FXML
     private void handleCancel() {
-        // Close the dialog
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.close();
     }

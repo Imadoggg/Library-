@@ -16,12 +16,10 @@ public class LibraryApplication extends Application {
         try {
             System.out.println("กำลังเริ่มแอพพลิเคชัน...");
 
-            // พยายามโหลด LoginView โดยใช้หลายวิธี
             Parent root = null;
             Exception lastException = null;
 
             try {
-                // วิธีที่ 1: ใช้ getResource ปกติ
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/LoginView.fxml"));
                 root = loader.load();
                 System.out.println("โหลด LoginView.fxml สำเร็จด้วยวิธีที่ 1");
@@ -30,7 +28,6 @@ public class LibraryApplication extends Application {
                 System.err.println("ไม่สามารถโหลด LoginView.fxml ด้วยวิธีที่ 1: " + e.getMessage());
 
                 try {
-                    // วิธีที่ 2: ใช้ ClassLoader
                     FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/views/LoginView.fxml"));
                     root = loader.load();
                     System.out.println("โหลด LoginView.fxml สำเร็จด้วยวิธีที่ 2");
@@ -40,7 +37,6 @@ public class LibraryApplication extends Application {
                 }
             }
 
-            // ถ้าไม่สามารถโหลดได้ ให้สร้าง UI อย่างง่ายแทน
             if (root == null) {
                 root = createSimpleLoginUI();
                 System.out.println("สร้าง UI อย่างง่ายแทนเนื่องจากไม่สามารถโหลด FXML ได้");
@@ -55,7 +51,6 @@ public class LibraryApplication extends Application {
             System.err.println("เกิดข้อผิดพลาดในการเริ่มแอพพลิเคชัน:");
             e.printStackTrace();
 
-            // แสดง Alert เพื่อแจ้งข้อผิดพลาด
             showErrorAlert("เกิดข้อผิดพลาดในการเริ่มแอพพลิเคชัน", e.getMessage());
         }
     }

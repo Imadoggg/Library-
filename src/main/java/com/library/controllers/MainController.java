@@ -17,13 +17,12 @@ public class MainController {
     @FXML private Label errorLabel;
 
     private LibraryDataManager dataManager;
-    private String currentRole = null; // "admin", "user", or null
+    private String currentRole = null;
 
     @FXML
     public void initialize() {
         dataManager = LibraryDataManager.getInstance();
 
-        // เริ่มต้นแสดงเฉพาะแท็บล็อกอิน
         showLoginTabOnly();
     }
 

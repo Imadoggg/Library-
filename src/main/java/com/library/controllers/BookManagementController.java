@@ -42,7 +42,6 @@ public class BookManagementController {
         bookList = FXCollections.observableArrayList();
 
         try {
-            // Set up columns (if defined)
             if (idColumn != null) {
                 idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             }
@@ -62,7 +61,6 @@ public class BookManagementController {
             if (statusColumn != null) {
                 statusColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
 
-                // Custom cell factory for status column
                 statusColumn.setCellFactory(column -> new TableCell<Book, Boolean>() {
                     @Override
                     protected void updateItem(Boolean item, boolean empty) {
@@ -76,7 +74,6 @@ public class BookManagementController {
                 });
             }
 
-            // Setup category ComboBox (if defined)
             if (categoryComboBox != null) {
                 System.out.println("Setting up categoryComboBox");
                 categoryComboBox.getItems().addAll(
@@ -93,12 +90,10 @@ public class BookManagementController {
                 System.out.println("categoryComboBox not found in FXML");
             }
 
-            // Setup search field Enter key handler
             if (searchField != null) {
                 searchField.setOnKeyPressed(this::handleSearchKeyPress);
             }
 
-            // Load initial data
             refreshBookList();
 
         } catch (Exception e) {
@@ -146,38 +141,30 @@ public class BookManagementController {
     @FXML
     public void handleAddBook(javafx.event.ActionEvent event) {
         try {
-            // โหลด FXML สำหรับหน้าต่าง popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/views/BookAddView.fxml"));
             Parent root = loader.load();
 
-            // สร้าง Stage ใหม่สำหรับ popup
             Stage popupStage = new Stage();
             popupStage.setTitle("เพิ่มหนังสือใหม่");
             popupStage.setScene(new Scene(root));
 
-            // ตั้งค่าให้เป็น modal (ต้องปิดก่อนจึงกลับไปทำงานกับหน้าหลักได้)
             popupStage.initModality(Modality.APPLICATION_MODAL);
 
-            // ดึง Stage หลัก
             Stage mainStage = (Stage) bookTableView.getScene().getWindow();
 
-            // กำหนดให้ popup อยู่ตรงกลางของหน้าต่างหลัก
             popupStage.initOwner(mainStage);
 
-            // ปรับแก้ BookAddController เพื่อรองรับการปิด popup
             BookAddController controller = loader.getController();
             controller.setStage(popupStage);
-            controller.setBookManagementController(this); // เพื่อให้สามารถเรียก refresh ได้
+            controller.setBookManagementController(this);
 
-            // แสดง popup และรอจนกว่าจะปิด
             popupStage.showAndWait();
 
-            // Refresh ข้อมูลหลังจากมีการเพิ่มหนังสือ
             refreshBookList();
 
         } catch (IOException e) {
             e.printStackTrace();
-            // แสดงข้อผิดพลาด
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);

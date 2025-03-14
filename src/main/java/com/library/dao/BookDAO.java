@@ -78,11 +78,11 @@ public class BookDAO {
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                // รับค่า ID ที่ถูกสร้างโดย AUTO_INCREMENT
+                // AUTO INCREMENT
                 try (ResultSet rs = pstmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         int generatedId = rs.getInt(1);
-                        book.setId(String.valueOf(generatedId)); // อัพเดต ID ในออบเจ็กต์
+                        book.setId(String.valueOf(generatedId));
                     }
                 }
                 return true;
@@ -112,7 +112,7 @@ public class BookDAO {
             e.printStackTrace();
             return false;
         }
-        // ไม่ปิด connection ถ้าได้รับมาจากภายนอก
+
     }
     public List<Book> findBooksByTitle(String title) {
         List<Book> books = new ArrayList<>();
@@ -193,6 +193,6 @@ public class BookDAO {
             e.printStackTrace();
         }
 
-        return "B001"; // Default if no books exist yet
+        return "B001";
     }
 }

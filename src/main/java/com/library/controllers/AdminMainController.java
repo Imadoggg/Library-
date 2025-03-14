@@ -24,7 +24,6 @@ public class AdminMainController {
         System.out.println("AdminMainController initializing...");
         dataManager = LibraryDataManager.getInstance();
 
-        // ตั้งค่าชื่อผู้ใช้
         if (dataManager.getCurrentUser() != null) {
             usernameLabel.setText(dataManager.getCurrentUser().getName());
             System.out.println("Set username label to: " + dataManager.getCurrentUser().getName());
@@ -32,7 +31,6 @@ public class AdminMainController {
             System.out.println("Current user is null");
         }
 
-        // แสดง dashboard เมื่อเริ่มต้น
         showDashboard();
     }
 
@@ -81,21 +79,18 @@ public class AdminMainController {
         try {
             System.out.println("Trying to load: " + fxmlPath);
 
-            // ลองหาไฟล์ด้วยหลายวิธี
+
             URL resource = null;
 
-            // วิธีที่ 1: ใช้ getResource ปกติ
             resource = getClass().getResource(fxmlPath);
             if (resource != null) {
                 System.out.println("Found resource using getClass().getResource()");
             } else {
-                // วิธีที่ 2: ลองใช้ ClassLoader
                 String relativePath = fxmlPath.startsWith("/") ? fxmlPath.substring(1) : fxmlPath;
                 resource = getClass().getClassLoader().getResource(relativePath);
                 if (resource != null) {
                     System.out.println("Found resource using ClassLoader: " + relativePath);
                 } else {
-                    // วิธีที่ 3: ลองเส้นทางอื่น
                     String altPath = "/views" + fxmlPath.substring(fxmlPath.lastIndexOf('/'));
                     resource = getClass().getResource(altPath);
                     if (resource != null) {
@@ -122,7 +117,6 @@ public class AdminMainController {
             e.printStackTrace();
             System.err.println("ไม่สามารถโหลด " + fxmlPath + ": " + e.getMessage());
 
-            // แสดงข้อความแจ้งเตือนบนหน้าจอ
             Label errorLabel = new Label("ไม่พบไฟล์ FXML: " + fxmlPath);
             errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
 

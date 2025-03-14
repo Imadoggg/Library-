@@ -17,23 +17,32 @@ import java.time.format.DateTimeFormatter;
 
 
 public class BorrowReturnController {
-    // Modified: removed memberComboBox since users can only borrow for themselves
-    @FXML private ComboBox<Book> bookComboBox;
-    @FXML private Button borrowButton;
-    @FXML private TableView<BorrowRecord> borrowedBooksTable;
-    @FXML private TableColumn<BorrowRecord, String> borrowIdColumn;
-    @FXML private TableColumn<BorrowRecord, String> memberNameColumn;
-    @FXML private TableColumn<BorrowRecord, String> bookTitleColumn;
-    @FXML private TableColumn<BorrowRecord, String> borrowDateColumn;
-    @FXML private TableColumn<BorrowRecord, Void> actionColumn;
+    @FXML
+    private ComboBox<Book> bookComboBox;
+    @FXML
+    private Button borrowButton;
+    @FXML
+    private TableView<BorrowRecord> borrowedBooksTable;
+    @FXML
+    private TableColumn<BorrowRecord, String> borrowIdColumn;
+    @FXML
+    private TableColumn<BorrowRecord, String> memberNameColumn;
+    @FXML
+    private TableColumn<BorrowRecord, String> bookTitleColumn;
+    @FXML
+    private TableColumn<BorrowRecord, String> borrowDateColumn;
+    @FXML
+    private TableColumn<BorrowRecord, Void> actionColumn;
 
-    // Added labels for user info and borrow list title
-    @FXML private Label currentUserLabel;
-    @FXML private Label borrowedBooksLabel;
-    @FXML private Label adminNoteLabel;
+    @FXML
+    private Label currentUserLabel;
+    @FXML
+    private Label borrowedBooksLabel;
+    @FXML
+    private Label adminNoteLabel;
 
     private LibraryDataManager dataManager;
-    private Member currentMember; // To store the current user's associated member
+    private Member currentMember;
 
     @FXML
     public void initialize() {
@@ -41,33 +50,26 @@ public class BorrowReturnController {
             System.out.println("BorrowReturnController.initialize() started");
             dataManager = LibraryDataManager.getInstance();
 
-            // Get current user and show in UI
             User currentUser = dataManager.getCurrentUser();
             if (currentUser != null) {
                 boolean isAdmin = dataManager.isCurrentUserAdmin();
 
                 if (isAdmin) {
-                    // Admin view setup
                     currentUserLabel.setText("Administrator View - Manage All Borrowed Books");
                     borrowedBooksLabel.setText("All Active Borrowed Books");
-                    adminNoteLabel.setVisible(true);  // Show admin note
-                    borrowButton.setDisable(true);    // Disable borrow button for admins
-                    currentMember = null; // Admins don't borrow books themselves
+                    adminNoteLabel.setVisible(true);
+                    borrowButton.setDisable(true);
+                    currentMember = null;
                 } else {
-                    // Regular user view setup
                     currentUserLabel.setText("Borrowing as: " + currentUser.getName());
-                    // Find or create a member for the current user
                     currentMember = findOrCreateMemberForUser(currentUser);
                 }
             }
 
-            // Setup book ComboBox
             setupBookComboBox();
 
-            // Setup TableView
             setupTableColumns();
 
-            // Load borrowed items
             refreshBorrowedBooks();
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,21 +77,19 @@ public class BorrowReturnController {
         }
     }
 
+
     private Member findOrCreateMemberForUser(User user) {
-        // Skip this process for admin users
         if (user.getRole().name().equals("ADMIN")) {
             return null;
         }
 
-        // Try to find a member with the same name as the user
         for (Member member : dataManager.getAllMembers()) {
             if (member.getName().equals(user.getName())) {
                 return member;
             }
         }
 
-        // If no member is found, create one with the name and username as contact
-        // Note: We store the username in 'contact' field as per the database schema
+
         Member newMember = new Member(null, user.getName(), user.getUsername());
         if (dataManager.addMember(newMember)) {
             return dataManager.getAllMembers().stream()
@@ -103,7 +103,6 @@ public class BorrowReturnController {
 
     private void setupBookComboBox() {
         if (bookComboBox != null) {
-            // Show only available books
             bookComboBox.setItems(FXCollections.observableArrayList(
                     dataManager.getAllBooks().stream()
                             .filter(Book::isAvailable)
@@ -125,7 +124,6 @@ public class BorrowReturnController {
 
     private void setupTableColumns() {
         if (borrowedBooksTable != null) {
-            // Setup columns
             borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             memberNameColumn.setCellValueFactory(cellData ->
                     new SimpleStringProperty(cellData.getValue().getMember().getName()));
@@ -134,7 +132,6 @@ public class BorrowReturnController {
             borrowDateColumn.setCellValueFactory(cellData ->
                     new SimpleStringProperty(cellData.getValue().getFormattedBorrowDate()));
 
-            // Setup return button in actionColumn - only visible for admins
             actionColumn.setCellFactory(param -> new TableCell<>() {
                 private final Button returnButton = new Button("Return");
 
@@ -153,7 +150,6 @@ public class BorrowReturnController {
                         setGraphic(null);
                     } else {
                         BorrowRecord record = getTableView().getItems().get(getIndex());
-                        // Only show the return button for admins
                         boolean isAdmin = dataManager.isCurrentUserAdmin();
                         if (isAdmin && !record.isReturned()) {
                             setGraphic(returnButton);
@@ -171,14 +167,12 @@ public class BorrowReturnController {
             boolean isAdmin = dataManager.isCurrentUserAdmin();
 
             if (isAdmin) {
-                // Admin view: show all active borrows for all users
                 borrowedBooksTable.setItems(FXCollections.observableArrayList(
                         dataManager.getAllBorrowRecords().stream()
                                 .filter(record -> !record.isReturned())
                                 .toList()
                 ));
             } else if (currentMember != null) {
-                // Regular user view: show only their borrows
                 ObservableList<BorrowRecord> userBorrows = FXCollections.observableArrayList(
                         dataManager.getAllBorrowRecords().stream()
                                 .filter(record -> !record.isReturned() &&
@@ -187,7 +181,6 @@ public class BorrowReturnController {
                 );
                 borrowedBooksTable.setItems(userBorrows);
             } else {
-                // If somehow there's no current member for a non-admin user
                 borrowedBooksTable.setItems(FXCollections.observableArrayList());
             }
         }
@@ -221,9 +214,8 @@ public class BorrowReturnController {
         if (newRecord != null) {
             showInfo("Book borrowed successfully");
             refreshBorrowedBooks();
-            refreshBooks(); // Refresh available books list
+            refreshBooks();
 
-            // Clear selection
             bookComboBox.setValue(null);
         } else {
             showError("Could not borrow the book");
@@ -231,7 +223,6 @@ public class BorrowReturnController {
     }
 
     private void handleReturnBook(BorrowRecord record) {
-        // Only admins can return books
         if (!dataManager.isCurrentUserAdmin()) {
             showError("Only administrators can process book returns");
             return;
@@ -240,7 +231,7 @@ public class BorrowReturnController {
         if (dataManager.returnBook(record.getId())) {
             showInfo("Book returned successfully");
             refreshBorrowedBooks();
-            refreshBooks(); // Refresh available books list
+            refreshBooks();
         } else {
             showError("Could not return the book");
         }
@@ -272,10 +263,7 @@ public class BorrowReturnController {
 
     @FXML
     public void validateBorrowInputs() {
-        // Check if book is selected
         boolean isValid = bookComboBox.getValue() != null;
-
-        // Enable/disable the borrow button based on validation
         if (borrowButton != null) {
             borrowButton.setDisable(!isValid);
         }
